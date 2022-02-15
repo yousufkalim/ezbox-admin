@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -13,14 +13,12 @@ import {
   Input,
   Row,
   Col,
-  Label,
 } from "reactstrap";
 // core components
 
 const { Option } = Select;
 
-const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
-  let [candidate, setCandidate] = useState({ skills: ["HTML"] });
+const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
   let [skills] = useState([
     "HTML",
     "CSS",
@@ -31,27 +29,22 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
   ]);
 
   const handleInput = (e) => {
-    setCandidate({ ...candidate, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleSkillsInput = (value) => {
-    setCandidate({ ...candidate, skills: value });
+    setUser({ ...user, skills: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !candidate.name ||
-      !candidate.email ||
-      !candidate.department ||
-      !candidate.skills
-    ) {
+    if (!user.name || !user.email || !user.department || !user.skills) {
       toast.error("All fields are required");
     } else {
-      api("post", "/users", candidate).then((res) => {
-        toast.success("Candidate added successfully");
-        getCandidates();
+      api("post", "/users", user).then((res) => {
+        toast.success("user added successfully");
+        getUsers();
         handleModal();
       });
     }
@@ -60,8 +53,8 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="Y" toggle={handleModal}>
-          Add a candidate
+        <ModalHeader charCode="X" toggle={handleModal}>
+          Edit a user
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -75,9 +68,9 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter candidate's name here"
+                          placeholder="Enter user's name here"
                           type="text"
-                          value={candidate.name}
+                          value={user.name}
                           name="name"
                           onChange={handleInput}
                         />
@@ -91,9 +84,9 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter candidate's email here"
+                          placeholder="Enter user's email here"
                           type="email"
-                          value={candidate.email}
+                          value={user.email}
                           name="email"
                           onChange={handleInput}
                         />
@@ -108,7 +101,7 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
                           className="form-control-alternative text-default"
                           required={true}
                           type="select"
-                          value={candidate.department}
+                          value={user.department}
                           name="department"
                           onChange={handleInput}
                         >
@@ -129,8 +122,8 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
                           mode="multiple"
                           allowClear
                           style={{ width: "100%" }}
-                          placeholder="Select candidate's skill"
-                          defaultValue={[skills[0]]}
+                          placeholder="Select user's skill"
+                          defaultValue={user.skills}
                           onChange={handleSkillsInput}
                         >
                           {skills.map((skill) => (
@@ -147,7 +140,7 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            Update
           </Button>
 
           <Button onClick={handleModal}>Cancel</Button>
@@ -157,4 +150,4 @@ const AddCandidate = ({ openModal, handleModal, getCandidates }) => {
   );
 };
 
-export default AddCandidate;
+export default EditUser;

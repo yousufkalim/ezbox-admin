@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -19,13 +19,8 @@ import {
 
 const { Option } = Select;
 
-const EditCandidate = ({
-  openModal,
-  handleModal,
-  candidate,
-  setCandidate,
-  getCandidates,
-}) => {
+const AddUser = ({ openModal, handleModal, getUsers }) => {
+  let [user, setUser] = useState({ skills: ["HTML"] });
   let [skills] = useState([
     "HTML",
     "CSS",
@@ -36,27 +31,22 @@ const EditCandidate = ({
   ]);
 
   const handleInput = (e) => {
-    setCandidate({ ...candidate, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const handleSkillsInput = (value) => {
-    setCandidate({ ...candidate, skills: value });
+    setUser({ ...user, skills: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !candidate.name ||
-      !candidate.email ||
-      !candidate.department ||
-      !candidate.skills
-    ) {
+    if (!user.name || !user.email || !user.department || !user.skills) {
       toast.error("All fields are required");
     } else {
-      api("post", "/users", candidate).then((res) => {
-        toast.success("Candidate added successfully");
-        getCandidates();
+      api("post", "/users", user).then((res) => {
+        toast.success("User added successfully");
+        getUsers();
         handleModal();
       });
     }
@@ -65,8 +55,8 @@ const EditCandidate = ({
   return (
     <>
       <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="Y" toggle={handleModal}>
-          Edit a candidate
+        <ModalHeader charCode="X" toggle={handleModal}>
+          Add a user
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -80,9 +70,9 @@ const EditCandidate = ({
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter candidate's name here"
+                          placeholder="Enter user's name here"
                           type="text"
-                          value={candidate.name}
+                          value={user.name}
                           name="name"
                           onChange={handleInput}
                         />
@@ -96,9 +86,9 @@ const EditCandidate = ({
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter candidate's email here"
+                          placeholder="Enter user's email here"
                           type="email"
-                          value={candidate.email}
+                          value={user.email}
                           name="email"
                           onChange={handleInput}
                         />
@@ -113,7 +103,7 @@ const EditCandidate = ({
                           className="form-control-alternative text-default"
                           required={true}
                           type="select"
-                          value={candidate.department}
+                          value={user.department}
                           name="department"
                           onChange={handleInput}
                         >
@@ -134,8 +124,8 @@ const EditCandidate = ({
                           mode="multiple"
                           allowClear
                           style={{ width: "100%" }}
-                          placeholder="Select candidate's skill"
-                          defaultValue={candidate.skills}
+                          placeholder="Select user's skill"
+                          defaultValue={[skills[0]]}
                           onChange={handleSkillsInput}
                         >
                           {skills.map((skill) => (
@@ -152,7 +142,7 @@ const EditCandidate = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Update
+            Save
           </Button>
 
           <Button onClick={handleModal}>Cancel</Button>
@@ -162,4 +152,4 @@ const EditCandidate = ({
   );
 };
 
-export default EditCandidate;
+export default AddUser;
