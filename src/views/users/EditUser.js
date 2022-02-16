@@ -19,35 +19,17 @@ import {
 const { Option } = Select;
 
 const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
-  let [skills] = useState([
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "React",
-    "Node",
-    "Express",
-  ]);
-
   const handleInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-
-  const handleSkillsInput = (value) => {
-    setUser({ ...user, skills: value });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!user.name || !user.email || !user.department || !user.skills) {
-      toast.error("All fields are required");
-    } else {
-      api("post", "/users", user).then((res) => {
-        toast.success("user added successfully");
-        getUsers();
-        handleModal();
-      });
-    }
+    api("post", "/users", user).then((res) => {
+      toast.success("user added successfully");
+      getUsers();
+      handleModal();
+    });
   };
 
   return (
@@ -62,7 +44,7 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="9" style={{ margin: "auto" }}>
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">Name</label>
                         <Input
@@ -76,9 +58,7 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="9" style={{ margin: "auto" }}>
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">Email</label>
                         <Input
@@ -94,42 +74,105 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="9" style={{ margin: "auto" }}>
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Department</label>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-password"
+                        >
+                          <span style={{ color: "red" }}>
+                            {user.password ? "" : "*"}{" "}
+                          </span>
+                          Password
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          id="input-password"
+                          placeholder="Password"
+                          type="password"
+                          value={user.password}
+                          name="password"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          Contact no.
+                        </label>
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          type="select"
-                          value={user.department}
-                          name="department"
+                          placeholder="Enter user's contact here"
+                          type="phone"
+                          value={user.number}
+                          name="number"
                           onChange={handleInput}
-                        >
-                          <option value="">Select a department</option>
-                          <option value="MERN">MERN</option>
-                          <option value="RN">React Native</option>
-                          <option value="dotNET">.NET</option>
-                        </Input>
+                          maxLength="11"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="9" style={{ margin: "auto" }}>
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Skills</label>
-                        <Select
+                        <label className="form-control-label">
+                          Date of Birth{" "}
+                        </label>
+                        <Input
                           className="form-control-alternative text-default"
-                          mode="multiple"
-                          allowClear
-                          style={{ width: "100%" }}
-                          placeholder="Select user's skill"
-                          defaultValue={user.skills}
-                          onChange={handleSkillsInput}
-                        >
-                          {skills.map((skill) => (
-                            <Option key={skill}>{skill}</Option>
-                          ))}
-                        </Select>
+                          required={true}
+                          placeholder="Enter user's date of birth here"
+                          type="date"
+                          value={user.dob}
+                          name="dob"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">Country</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter user's country here"
+                          type="text"
+                          value={user.country}
+                          name="country"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">City</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter user's city here"
+                          type="text"
+                          value={user.city}
+                          name="city"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">Address</label>
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter user's address here"
+                          type="text"
+                          value={user.address}
+                          name="address"
+                          onChange={handleInput}
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
