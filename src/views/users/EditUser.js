@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -22,13 +22,32 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
   const handleInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("------------------------------id", user._id);
+
+    if (user.name == "") {
+      return toast.error("Please enter user's name");
+    }
+
+    if (user.email == "") {
+      return toast.error("Please enter email");
+    }
+    if (!(user.email.includes(".") && user.email.includes("@"))) {
+      return toast.error("Please enter a valid email");
+    }
+
+    if (user.password && user.password.length < 8) {
+      return toast.error("Passwords should be of atleast 8 letters");
+    }
+
+    if (user.number == "") {
+      return toast.error("Contact no. is required");
+    }
 
     api("put", `/users/${user._id}`, user).then((res) => {
       toast.success("user edited successfully");
-      // getUsers();
+      getUsers();
       handleModal();
     });
   };
@@ -45,8 +64,11 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
+                        <span style={{ color: "red" }}>
+                          {user.name ? "" : "*"}{" "}
+                        </span>
                         <label className="form-control-label">Name</label>
                         <Input
                           className="form-control-alternative text-default"
@@ -59,8 +81,11 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
+                        <span style={{ color: "red" }}>
+                          {user.email ? "" : "*"}{" "}
+                        </span>
                         <label className="form-control-label">Email</label>
                         <Input
                           className="form-control-alternative text-default"
@@ -75,15 +100,12 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label
                           className="form-control-label"
                           htmlFor="input-password"
                         >
-                          <span style={{ color: "red" }}>
-                            {user.password ? "" : "*"}{" "}
-                          </span>
                           Password
                         </label>
                         <Input
@@ -97,8 +119,11 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
+                        <span style={{ color: "red" }}>
+                          {user.number ? "" : "*"}{" "}
+                        </span>
                         <label className="form-control-label">
                           Contact no.
                         </label>
@@ -116,39 +141,23 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">
-                          Date of Birth{" "}
-                        </label>
+                        <label className="form-control-label">Address</label>
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's date of birth here"
-                          type="date"
-                          value={user.dob}
-                          name="dob"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">Country</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's country here"
+                          placeholder="Enter user's address here"
                           type="text"
-                          value={user.country}
-                          name="country"
+                          value={user.address}
+                          name="address"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">City</label>
                         <Input
@@ -162,16 +171,16 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Address</label>
+                        <label className="form-control-label">Country</label>
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's address here"
+                          placeholder="Enter user's country here"
                           type="text"
-                          value={user.address}
-                          name="address"
+                          value={user.country}
+                          name="country"
                           onChange={handleInput}
                         />
                       </FormGroup>

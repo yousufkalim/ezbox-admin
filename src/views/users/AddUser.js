@@ -29,7 +29,6 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
     number: "",
     country: "",
     city: "",
-    dob: "",
   });
 
   const handleInput = (e) => {
@@ -81,7 +80,7 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -101,7 +100,7 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -123,7 +122,7 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -145,7 +144,7 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           <span style={{ color: "red" }}>
@@ -167,39 +166,23 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">
-                          Date of Birth{" "}
-                        </label>
+                        <label className="form-control-label">Address</label>
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's date of birth here"
-                          type="date"
-                          value={user.dob}
-                          name="dob"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">Country</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's country here"
+                          placeholder="Enter user's address here"
                           type="text"
-                          value={user.country}
-                          name="country"
+                          value={user.address}
+                          name="address"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">City</label>
                         <Input
@@ -213,16 +196,16 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="4" style={{ margin: "auto" }}>
+                    <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Address</label>
+                        <label className="form-control-label">Country</label>
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's address here"
+                          placeholder="Enter user's country here"
                           type="text"
-                          value={user.address}
-                          name="address"
+                          value={user.country}
+                          name="country"
                           onChange={handleInput}
                         />
                       </FormGroup>

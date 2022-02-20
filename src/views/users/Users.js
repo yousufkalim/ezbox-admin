@@ -44,11 +44,19 @@ import { toast } from "react-toastify";
 const Users = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [user, setUser] = useState({});
   const { users } = Store();
   const updateStore = UpdateStore();
   const history = useHistory();
-  const { pathname } = window.location;
+  const [user, setUser] = useState({
+    _id: "",
+    name: "",
+    email: "",
+    password: "",
+    address: "",
+    number: "",
+    country: "",
+    city: "",
+  });
 
   useEffect(() => {
     getUsers();
@@ -57,17 +65,7 @@ const Users = ({ status }) => {
   const getUsers = async () => {
     const data = await api("get", "/users");
 
-    if (pathname === "/admin/invited-users") {
-      updateStore({
-        users: data.users.filter((a) => a.test_conducted === false),
-      });
-    } else if (pathname === "/admin/pending-users") {
-      updateStore({
-        users: data.users.filter((a) => a.test_conducted === true),
-      });
-    } else {
-      updateStore({ users: data.users });
-    }
+    updateStore({ users: data.users });
   };
 
   const handleModal = () => {
@@ -76,7 +74,18 @@ const Users = ({ status }) => {
   };
 
   const handleEditModal = (item) => {
-    setUser(item || user);
+    if (item) {
+      setUser({
+        _id: item._id,
+        name: item.name,
+        email: item.email,
+        address: item.address,
+        number: item.number,
+        country: item.country,
+        city: item.city,
+      });
+    }
+
     setEditModal((open) => !open);
     return openModal;
   };
@@ -116,8 +125,8 @@ const Users = ({ status }) => {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Country</th>
-                    <th scope="col">Contact no.</th>
+                    <th scope="col">Contact no</th>
+                    <th scope="col">City</th>
                     <th scope="col">Created At</th>
                     <th scope="col" />
                   </tr>
@@ -143,8 +152,8 @@ const Users = ({ status }) => {
                             : item.email}
                         </td>
 
-                        <td>{item.country}</td>
                         <td>{item.number}</td>
+                        <td>{item.city}</td>
                         <td>{new Date(item.createdAt).toDateString()}</td>
 
                         <td className="text-right">
