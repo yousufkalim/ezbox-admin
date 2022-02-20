@@ -24,10 +24,11 @@ const EditUser = ({ openModal, handleModal, user, setUser, getUsers }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("------------------------------id", user._id);
 
-    api("post", "/users", user).then((res) => {
-      toast.success("user added successfully");
-      getUsers();
+    api("put", `/users/${user._id}`, user).then((res) => {
+      toast.success("user edited successfully");
+      // getUsers();
       handleModal();
     });
   };

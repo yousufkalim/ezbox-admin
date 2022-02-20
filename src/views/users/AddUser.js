@@ -42,24 +42,31 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (
-      !user.name ||
-      !user.email ||
-      !user.password ||
-      !user.number ||
-      !user.country ||
-      !user.address ||
-      !user.city
-    ) {
-      toast.error("All fields are required");
-    } else {
-      api("post", "/users", user).then((res) => {
-        toast.success("User added successfully");
-        getUsers();
-        handleModal();
-      });
+    if (user.name == "") {
+      return toast.error("Please enter user's name");
     }
+
+    if (user.email == "") {
+      return toast.error("Please enter email");
+    }
+    if (!(user.email.includes(".") && user.email.includes("@"))) {
+      return toast.error("Please enter a valid email");
+    }
+    if (user.password == "") {
+      return toast.error("Password is required");
+    }
+    if (user.password.length < 8) {
+      return toast.error("Passwords should be of atleast 8 letters");
+    }
+    if (user.number == "") {
+      return toast.error("Contact no. is required");
+    }
+
+    api("post", "/users", user).then((res) => {
+      toast.success("User added successfully");
+      getUsers();
+      handleModal();
+    });
   };
 
   return (
@@ -76,7 +83,13 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                   <Row>
                     <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Name</label>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {user.name ? "" : "*"}{" "}
+                          </span>
+                          Name
+                        </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
@@ -90,7 +103,13 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                     </Col>
                     <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Email</label>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {user.email ? "" : "*"}{" "}
+                          </span>
+                          Email
+                        </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
@@ -129,6 +148,9 @@ const AddUser = ({ openModal, handleModal, getUsers }) => {
                     <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
+                          <span style={{ color: "red" }}>
+                            {user.number ? "" : "*"}{" "}
+                          </span>{" "}
                           Contact no.
                         </label>
                         <Input
