@@ -37,7 +37,6 @@ import {
 
 const AdminNavbar = (props) => {
   const { user } = Store();
-
   const handleLogout = () => {
     localStorage.setItem("token", "");
     window.location = "/auth/login";
@@ -59,7 +58,7 @@ const AdminNavbar = (props) => {
                 <Media className="align-items-center">
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      {user.name}
+                      {user?.name}
                     </span>
                   </Media>
                 </Media>

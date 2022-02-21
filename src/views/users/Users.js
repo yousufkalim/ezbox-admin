@@ -25,7 +25,6 @@ import {
   Card,
   CardHeader,
   Button,
-  CardFooter,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
@@ -34,42 +33,39 @@ import {
   Table,
   Container,
   Row,
-  UncontrolledTooltip,
 } from "reactstrap";
 
 // core components
-import AddCandidate from "./AddCandidate";
-import EditCandidate from "./EditCandidate";
+import AddUser from "./AddUser";
+import EditUser from "./EditUser";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Candidates = ({ status }) => {
+const Users = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [candidate, setCandidate] = useState({});
-  const { candidates } = Store();
+  const { users } = Store();
   const updateStore = UpdateStore();
   const history = useHistory();
-  const { pathname } = window.location;
+  const [user, setUser] = useState({
+    _id: "",
+    name: "",
+    email: "",
+    password: "",
+    address: "",
+    number: "",
+    country: "",
+    city: "",
+  });
 
   useEffect(() => {
-    getCandidates();
+    getUsers();
   }, []);
 
-  const getCandidates = async () => {
+  const getUsers = async () => {
     const data = await api("get", "/users");
 
-    if (pathname === "/admin/invited-candidates") {
-      updateStore({
-        candidates: data.users.filter((a) => a.test_conducted === false),
-      });
-    } else if (pathname === "/admin/pending-candidates") {
-      updateStore({
-        candidates: data.users.filter((a) => a.test_conducted === true),
-      });
-    } else {
-      updateStore({ candidates: data.users });
-    }
+    updateStore({ users: data.users });
   };
 
   const handleModal = () => {
@@ -78,7 +74,18 @@ const Candidates = ({ status }) => {
   };
 
   const handleEditModal = (item) => {
-    setCandidate(item || candidate);
+    if (item) {
+      setUser({
+        _id: item._id,
+        name: item.name,
+        email: item.email,
+        address: item.address,
+        number: item.number,
+        country: item.country,
+        city: item.city,
+      });
+    }
+
     setEditModal((open) => !open);
     return openModal;
   };
@@ -86,7 +93,7 @@ const Candidates = ({ status }) => {
   const handleDelete = (id) => {
     api("delete", `/users/${id}`).then(() => {
       toast.success("User deleted successfully");
-      getCandidates();
+      getUsers();
     });
   };
 
@@ -101,7 +108,7 @@ const Candidates = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Candidates</h3>
+                  <h3 className="mb-0">Users</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -109,7 +116,7 @@ const Candidates = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Candidate
+                    Add user
                   </Button>
                 </div>
               </CardHeader>
@@ -118,14 +125,14 @@ const Candidates = ({ status }) => {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Department</th>
+                    <th scope="col">Contact no</th>
+                    <th scope="col">City</th>
                     <th scope="col">Created At</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {candidates.map((item) => {
+                  {users?.map((item) => {
                     return (
                       <tr>
                         <th scope="row">
@@ -144,13 +151,9 @@ const Candidates = ({ status }) => {
                             ? item.email?.substring(0, 30) + "..."
                             : item.email}
                         </td>
-                        <td>
-                          <Badge color="" className="badge-dot mr-4">
-                            <i className="bg-success" />
-                            {item.test_conducted ? "Pending" : "Invited"}
-                          </Badge>
-                        </td>
-                        <td>{item.department}</td>
+
+                        <td>{item.number}</td>
+                        <td>{item.city}</td>
                         <td>{new Date(item.createdAt).toDateString()}</td>
 
                         <td className="text-right">
@@ -169,9 +172,7 @@ const Candidates = ({ status }) => {
                               {item.test_conducted && (
                                 <DropdownItem
                                   onClick={() =>
-                                    history.push(
-                                      `/admin/candidates/${item._id}`
-                                    )
+                                    history.push(`/admin/users/${item._id}`)
                                   }
                                 >
                                   View
@@ -257,19 +258,19 @@ const Candidates = ({ status }) => {
           </div>
         </Row>
         {openModal && (
-          <AddCandidate
+          <AddUser
             openModal={openModal}
             handleModal={handleModal}
-            getCandidates={getCandidates}
+            getUsers={getUsers}
           />
         )}
         {editModal && (
-          <EditCandidate
+          <EditUser
             openModal={editModal}
             handleModal={handleEditModal}
-            candidate={candidate}
-            setCandidate={setCandidate}
-            getCandidates={getCandidates}
+            user={user}
+            setUser={setUser}
+            getUsers={getUsers}
           />
         )}
       </Container>
@@ -277,4 +278,4 @@ const Candidates = ({ status }) => {
   );
 };
 
-export default Candidates;
+export default Users;

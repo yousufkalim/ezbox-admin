@@ -16,7 +16,7 @@
 
 */
 import Index from "views/Index.js";
-import Candidates from "views/candidates/Candidates";
+import Users from "views/users/Users";
 import Register from "views/Register.js";
 import Login from "views/Login.js";
 
@@ -29,26 +29,13 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/candidates",
-    name: "All Candidates",
+    path: "/users",
+    name: "All Users",
     icon: "ni ni-single-02 text-primary",
-    component: Candidates,
+    component: Users,
     layout: "/admin",
   },
-  {
-    path: "/invited-candidates",
-    name: "Invited Candidates",
-    icon: "ni ni-single-02 text-yellow",
-    component: Candidates,
-    layout: "/admin",
-  },
-  {
-    path: "/pending-candidates",
-    name: "Pending Candidates",
-    icon: "ni ni-single-02 text-green",
-    component: Candidates,
-    layout: "/admin",
-  },
+
   {
     path: "/register",
     name: "Register",

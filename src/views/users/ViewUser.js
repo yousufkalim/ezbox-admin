@@ -2,44 +2,27 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "api";
-import { Store, UpdateStore } from "StoreContext";
-import {
-  Badge,
-  Card,
-  CardHeader,
-  Button,
-  CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
-  Table,
-  Container,
-  Row,
-  UncontrolledTooltip,
-} from "reactstrap";
+import { Store } from "StoreContext";
+import { Card, CardHeader, Table, Container, Row } from "reactstrap";
 
 // core components
-import AddCandidate from "./AddCandidate";
-import EditCandidate from "./EditCandidate";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const ViewCandidate = () => {
+const ViewUser = () => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [candidate, setCandidate] = useState({});
-  const { candidates } = Store();
+  const [user, setUser] = useState({});
+  const { users } = Store();
   const { userId } = useParams();
 
   useEffect(() => {
-    getCandidates();
+    getUsers();
   }, []);
 
-  const getCandidates = async () => {
+  const getUsers = async () => {
     const data = await api("get", `/results/${userId}`);
-    setCandidate(data?.user);
+    setUser(data?.user);
   };
 
   const handleModal = () => {
@@ -48,7 +31,7 @@ const ViewCandidate = () => {
   };
 
   const handleEditModal = (item) => {
-    setCandidate(item || candidate);
+    setUser(item || user);
     setEditModal((open) => !open);
     return openModal;
   };
@@ -56,7 +39,7 @@ const ViewCandidate = () => {
   const handleDelete = (id) => {
     api("delete", `/users/${id}`).then(() => {
       toast.success("User deleted successfully");
-      getCandidates();
+      getUsers();
     });
   };
 
@@ -86,7 +69,7 @@ const ViewCandidate = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {candidate?.result?.result_by_tech.map((tech) => {
+                  {user?.result?.result_by_tech.map((tech) => {
                     return (
                       <tr key={tech.id}>
                         <th>{tech.technology}</th>
@@ -100,11 +83,11 @@ const ViewCandidate = () => {
                   })}
                   <tr>
                     <th>Overall</th>
-                    <td>{candidate?.result?.total}</td>
-                    <td>{candidate?.result?.total_correct}</td>
-                    <td>{candidate?.result?.total_wrong}</td>
-                    <td>{candidate?.result?.overall_percentage}</td>
-                    <td>{candidate?.result?.overall_rank}</td>
+                    <td>{user?.result?.total}</td>
+                    <td>{user?.result?.total_correct}</td>
+                    <td>{user?.result?.total_wrong}</td>
+                    <td>{user?.result?.overall_percentage}</td>
+                    <td>{user?.result?.overall_rank}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -117,7 +100,7 @@ const ViewCandidate = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {candidate?.result?.questionnaire.map((data) => (
+                  {user?.result?.questionnaire.map((data) => (
                     <tr
                       key={data.id}
                       style={{
@@ -204,4 +187,4 @@ const ViewCandidate = () => {
   );
 };
 
-export default ViewCandidate;
+export default ViewUser;
