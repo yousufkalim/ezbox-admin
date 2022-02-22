@@ -16,7 +16,14 @@
 
 */
 import Index from "views/Index.js";
-import Users from "views/users/Users";
+import Advertising from "views/advertising/Advertising";
+import Consulting from "views/consulting/Consulting";
+import Contact from "views/contact/Contact";
+import HomeScreen from "views/home/HomeScreen";
+import Navigation from "views/navigation/Navigation";
+import ProductDev from "views/productDev/ProductDev";
+import Products from "views/products/Products";
+import Reviews from "views/reviews/Reviews";
 import Register from "views/Register.js";
 import Login from "views/Login.js";
 
@@ -28,11 +35,67 @@ var routes = [
     component: Index,
     layout: "/admin",
   },
+  // {
+  //   path: "/users",
+  //   name: "All Users",
+  //   icon: "ni ni-single-02 text-primary",
+  //   component: Users,
+  //   layout: "/admin",
+  // },
   {
-    path: "/users",
-    name: "All Users",
+    path: "/advertising",
+    name: "Advertising",
     icon: "ni ni-single-02 text-primary",
-    component: Users,
+    component: Advertising,
+    layout: "/admin",
+  },
+  {
+    path: "/consulting",
+    name: "Consulting",
+    icon: "ni ni-single-02 text-primary",
+    component: Consulting,
+    layout: "/admin",
+  },
+  {
+    path: "/contact",
+    name: "Contact Us",
+    icon: "ni ni-single-02 text-primary",
+    component: Contact,
+    layout: "/admin",
+  },
+  {
+    path: "/home",
+    name: "Home Screen",
+    icon: "ni ni-single-02 text-primary",
+    component: HomeScreen,
+    layout: "/admin",
+  },
+  {
+    path: "/navigation",
+    name: "Navigation",
+    icon: "ni ni-single-02 text-primary",
+    component: Navigation,
+    layout: "/admin",
+  },
+  {
+    path: "/productDev",
+    name: "Product Dev",
+    icon: "ni ni-single-02 text-primary",
+    component: ProductDev,
+    layout: "/admin",
+  },
+  {
+    path: "/products",
+    name: "Products",
+    icon: "ni ni-single-02 text-success",
+    component: Products,
+    layout: "/admin",
+  },
+  {
+    path: "/reviews",
+    name: "Reviews",
+    icon: "ni ni-single-02 text-primary",
+    component: Reviews,
     layout: "/admin",
   },
 
