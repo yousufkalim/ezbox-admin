@@ -44,16 +44,17 @@ import { toast } from "react-toastify";
 const Advertising = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const { advertise } = Store();
-  const updateStore = UpdateStore();
   const history = useHistory();
-  const [advertising, setadvertising] = useState({
+  const [data, setData] = useState({});
+  const [advertising, setAdvertising] = useState({
     _id: "",
     title: "",
     text: "",
-    image: "",
+    leftImg: "",
+    centerImg: "",
+    rightImg: "",
     textbottom: "",
-    contactbutton: "",
+    contactbutton: true,
   });
 
   useEffect(() => {
@@ -61,9 +62,9 @@ const Advertising = ({ status }) => {
   }, []);
 
   const getAdvertising = async () => {
-    const data = await api("get", "/users");
-
-    updateStore({ advertise: data.advertise });
+    const data = await api("get", "/advertising");
+    setData(data.advertise);
+    console.log("====", data.advertise);
   };
 
   const handleModal = () => {
@@ -73,11 +74,13 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setadvertising({
+      setAdvertising({
         _id: item._id,
         title: item.title,
         text: item.text,
-        image: item.image,
+        leftImg: item.leftImg,
+        centerImg: item.centerImg,
+        rightImg: item.rightImg,
         textbottom: item.textbottom,
         contactbutton: item.contactbutton,
       });
@@ -87,8 +90,8 @@ const Advertising = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
+  const handleDelete = () => {
+    api("delete", "/advertising").then(() => {
       toast.success("Advertising deleted successfully");
       getAdvertising();
     });
@@ -129,44 +132,49 @@ const Advertising = ({ status }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {advertise?.map((item) => {
-                    return (
-                      <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.name}>
-                                {item.name?.length > 30
-                                  ? item.name?.substring(0, 30) + "..."
-                                  : item.name}
-                              </span>
-                            </Media>
+                  {Object.keys(data).length > 0 ? (
+                    <tr>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm" title={data.title}>
+                              {data.title?.length > 30
+                                ? data.title?.substring(0, 30) + "..."
+                                : data.title}
+                            </span>
                           </Media>
-                        </th>
-                        <td title={item.email}>
-                          {item.email?.length > 30
-                            ? item.email?.substring(0, 30) + "..."
-                            : item.email}
-                        </td>
+                        </Media>
+                      </th>
+                      <td title={data.text}>
+                        {data.text?.length > 30
+                          ? data.text?.substring(0, 30) + "..."
+                          : data.text}
+                      </td>
+                      <td title={data.textbottom}>
+                        {data.textbottom?.length > 30
+                          ? data.textbottom?.substring(0, 30) + "..."
+                          : data.textbottom}
+                      </td>
 
-                        <td>{item.number}</td>
-                        <td>{item.city}</td>
-                        <td>{new Date(item.createdAt).toDateString()}</td>
+                      <td title={data.contactbutton}>
+                        {" "}
+                        {data.contactbutton ? "Enabled" : "Disabled"}
+                      </td>
 
-                        <td className="text-right">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              {item.test_conducted && (
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            {/* {item.test_conducted && (
                                 <DropdownItem
                                   onClick={() =>
                                     history.push(`/admin/users/${item._id}`)
@@ -174,26 +182,29 @@ const Advertising = ({ status }) => {
                                 >
                                   View
                                 </DropdownItem>
-                              )}
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={() => handleEditModal(item)}
-                              >
-                                Edit
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                className="text-danger"
-                                onClick={() => handleDelete(item._id)}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                              )} */}
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => handleEditModal(data)}
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              className="text-danger"
+                              onClick={() => handleDelete(data._id)}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>N/A</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>
@@ -211,7 +222,7 @@ const Advertising = ({ status }) => {
             openModal={editModal}
             handleModal={handleEditModal}
             advertising={advertising}
-            setadvertising={setadvertising}
+            setAdvertising={setAdvertising}
             getAdvertising={getAdvertising}
           />
         )}

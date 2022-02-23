@@ -21,39 +21,42 @@ const { Option } = Select;
 const EditAdvertising = ({
   openModal,
   handleModal,
-  user,
-  setUser,
-  getUsers,
+  advertising,
+  setAdvertising,
+  getAdvertising,
 }) => {
   const handleInput = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setAdvertising({ ...advertising, [e.target.name]: e.target.value });
+  };
+  const handleFileChange = (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    api("post", "/image", formData).then((res) => {
+      toast.success("Image uploaded successfully");
+      setAdvertising({ ...advertising, [e.target.name]: res.url });
+    });
+  };
+
+  const handleOnChange = () => {
+    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (user.name == "") {
-      return toast.error("Please enter user's name");
+    if (
+      advertising.title ||
+      advertising.text ||
+      advertising.leftImg ||
+      advertising.rightImg ||
+      advertising.centerImg ||
+      advertising.textbottom ||
+      advertising.contactbutton == ""
+    ) {
+      return toast.error("All fields are required");
     }
-
-    if (user.email == "") {
-      return toast.error("Please enter email");
-    }
-    if (!(user.email.includes(".") && user.email.includes("@"))) {
-      return toast.error("Please enter a valid email");
-    }
-
-    if (user.password && user.password.length < 8) {
-      return toast.error("Passwords should be of atleast 8 letters");
-    }
-
-    if (user.number == "") {
-      return toast.error("Contact no. is required");
-    }
-
-    api("put", `/users/${user._id}`, user).then((res) => {
-      toast.success("user edited successfully");
-      getUsers();
+    api("post", "/advertising", advertising).then((res) => {
+      toast.success("Advertising edited successfully");
+      getAdvertising();
       handleModal();
     });
   };
@@ -62,7 +65,7 @@ const EditAdvertising = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit a user
+          Edit Advertising
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -70,126 +73,146 @@ const EditAdvertising = ({
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="4">
                       <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.name ? "" : "*"}{" "}
-                        </span>
-                        <label className="form-control-label">Name</label>
+                        <label className="form-control-label" htmlFor="leftImg">
+                          <span style={{ color: "red" }}>
+                            {advertising.leftImg ? "" : "*"}
+                          </span>{" "}
+                          Left Image <i className="ni ni-album-2" />
+                        </label>
                         <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's name here"
-                          type="text"
-                          value={user.name}
-                          name="name"
-                          onChange={handleInput}
+                          className="form-control-file form"
+                          id="leftImg"
+                          name="leftImg"
+                          type="file"
+                          onChange={handleFileChange}
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.email ? "" : "*"}{" "}
-                        </span>
-                        <label className="form-control-label">Email</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's email here"
-                          type="email"
-                          value={user.email}
-                          name="email"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-password"
+                          htmlFor="centerImg"
                         >
-                          Password
+                          <span style={{ color: "red" }}>
+                            {advertising.centerImg ? "" : "*"}
+                          </span>{" "}
+                          Center Image <i className="ni ni-album-2" />
                         </label>
                         <Input
-                          className="form-control-alternative"
-                          id="input-password"
-                          placeholder="Password"
-                          type="password"
-                          value={user.password}
-                          name="password"
-                          onChange={handleInput}
+                          className="form-control-file form"
+                          id="centerImg"
+                          name="centerImg"
+                          type="file"
+                          onChange={handleFileChange}
                         />
                       </FormGroup>
                     </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="rightImg"
+                        >
+                          <span style={{ color: "red" }}>
+                            {advertising.rightImg ? "" : "*"}
+                          </span>{" "}
+                          Right Image <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="rightImg"
+                          name="rightImg"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  <Row>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.number ? "" : "*"}{" "}
-                        </span>
                         <label className="form-control-label">
-                          Contact no.
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {advertising.title ? "" : "*"}{" "}
+                          </span>
+                          Title
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter advertising's title here"
+                          type="text"
+                          value={advertising.title}
+                          name="title"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {advertising.text ? "" : "*"}{" "}
+                          </span>
+                          Text
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter advertising's text here"
+                          type="text"
+                          value={advertising.text}
+                          name="text"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {advertising.textbottom ? "" : "*"}{" "}
+                          </span>
+                          Text Bottom
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter advertising's textbottom here"
+                          type="text"
+                          value={advertising.textbottom}
+                          name="textbottom"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${advertising.contactbutton}`}
+                          className="custom-control-input"
+                          type="checkbox"
+                          checked={advertising.contactbutton}
+                          onChange={handleOnChange}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${advertising.contactbutton}`}
+                        >
+                          Contact Button
                         </label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's contact here"
-                          type="phone"
-                          value={user.number}
-                          name="number"
-                          onChange={handleInput}
-                          maxLength="11"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">Address</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's address here"
-                          type="text"
-                          value={user.address}
-                          name="address"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">City</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's city here"
-                          type="text"
-                          value={user.city}
-                          name="city"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">Country</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's country here"
-                          type="text"
-                          value={user.country}
-                          name="country"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
+                      </div>
                     </Col>
                   </Row>
                 </div>
