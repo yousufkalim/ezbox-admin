@@ -12,17 +12,17 @@ import { toast } from "react-toastify";
 const ViewAdvertising = () => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [user, setUser] = useState({});
-  const { users } = Store();
-  const { userId } = useParams();
+  const [advertising, setAdvertising] = useState({});
+  const { advertise } = Store();
+  const { advertisingId } = useParams();
 
   useEffect(() => {
-    getUsers();
+    getAdvertising();
   }, []);
 
-  const getUsers = async () => {
-    const data = await api("get", `/results/${userId}`);
-    setUser(data?.user);
+  const getAdvertising = async () => {
+    const data = await api("get", `/results/${advertisingId}`);
+    setAdvertising(data?.advertising);
   };
 
   const handleModal = () => {
@@ -31,15 +31,15 @@ const ViewAdvertising = () => {
   };
 
   const handleEditModal = (item) => {
-    setUser(item || user);
+    setAdvertising(item || user);
     setEditModal((open) => !open);
     return openModal;
   };
 
   const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("User deleted successfully");
-      getUsers();
+    api("delete", `/advertising/${id}`).then(() => {
+      toast.success("Advertising deleted successfully");
+      getAdvertising();
     });
   };
 

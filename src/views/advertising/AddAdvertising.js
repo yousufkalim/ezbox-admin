@@ -15,6 +15,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 // core components
 
 const { Option } = Select;
@@ -23,39 +24,42 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
   let [advertising, setAdvertising] = useState({
     title: "",
     text: "",
-    image: "",
+    leftImg: "",
+    centerImg: "",
+    rightImg: "",
     textbottom: "",
-    contactbutton: "",
+    contactbutton: true,
   });
+
+  const handleOnChange = () => {
+    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+  };
 
   const handleInput = (e) => {
     setAdvertising({ ...advertising, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.files[0] });
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    api("post", "/image", formData).then((res) => {
+      toast.success("Image uploaded successfully");
+      setAdvertising({ ...advertising, [e.target.name]: res.url });
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (advertising.name == "") {
-    //   return toast.error("Please enter user's name");
-    // }
-
-    // if (user.email == "") {
-    //   return toast.error("Please enter email");
-    // }
-    // if (!(user.email.includes(".") && user.email.includes("@"))) {
-    //   return toast.error("Please enter a valid email");
-    // }
-    // if (user.password == "") {
-    //   return toast.error("Password is required");
-    // }
-    // if (user.password.length < 8) {
-    //   return toast.error("Passwords should be of atleast 8 letters");
-    // }
-    // if (user.number == "") {
-    //   return toast.error("Contact no. is required");
-    // }
+    if (
+      (advertising.title ||
+        advertising.text ||
+        advertising.leftImg ||
+        advertising.rightImg ||
+        advertising.centerImg ||
+        advertising.textbottom ||
+        advertising.contactbutton) == ""
+    ) {
+      return toast.error("All fields are required");
+    }
 
     api("post", "/advertising", advertising).then((res) => {
       toast.success("Advertising added successfully");
@@ -68,7 +72,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add a user
+          Add Advertising
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -76,21 +80,58 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="12">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
+                        <label className="form-control-label" htmlFor="leftImg">
                           <span style={{ color: "red" }}>
-                            {advertising.image ? "" : "*"}
+                            {advertising.leftImg ? "" : "*"}
                           </span>{" "}
-                          Add Image <i className="ni ni-album-2" />
+                          Left Image <i className="ni ni-album-2" />
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="input-image"
-                          name="profile_pic"
+                          id="leftImg"
+                          name="leftImg"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="centerImg"
+                        >
+                          <span style={{ color: "red" }}>
+                            {advertising.centerImg ? "" : "*"}
+                          </span>{" "}
+                          Center Image <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="centerImg"
+                          name="centerImg"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="rightImg"
+                        >
+                          <span style={{ color: "red" }}>
+                            {advertising.rightImg ? "" : "*"}
+                          </span>{" "}
+                          Right Image <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="rightImg"
+                          name="rightImg"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -162,24 +203,23 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                       </FormGroup>
                     </Col>
                     <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          <span style={{ color: "red" }}>
-                            {advertising.number ? "" : "*"}{" "}
-                          </span>{" "}
-                          Contact no.
-                        </label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter advertising's contact here"
-                          type="phone"
-                          value={advertising.number}
-                          name="number"
-                          onChange={handleInput}
-                          maxLength="11"
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${advertising.contactbutton}`}
+                          checked={advertising.contactbutton}
+                          className="custom-control-input"
+                          type="checkbox"
+                          onChange={handleOnChange}
                         />
-                      </FormGroup>
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${advertising.contactbutton}`}
+                        >
+                          Contact Button
+                        </label>
+                      </div>
                     </Col>
                   </Row>
                 </div>
