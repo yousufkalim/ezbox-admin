@@ -19,7 +19,7 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "api";
-import { Store, UpdateStore } from "StoreContext";
+
 import {
   Badge,
   Card,
@@ -36,33 +36,29 @@ import {
 } from "reactstrap";
 
 // core components
-import AddAdvertising from "./AddProducts";
-import EditAdvertising from "./EditProducts";
+import AddProducts from "./AddProducts";
+import EditProducts from "./EditProducts";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Advertising = ({ status }) => {
+const Products = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const history = useHistory();
-  const [data, setData] = useState([]);
-  const [advertising, setadvertising] = useState({
-    _id: "",
+  const [data, setData] = useState({});
+  let [product, setProduct] = useState({
     title: "",
-    text: "",
+    description: "",
     image: "",
-    textbottom: "",
-    contactbutton: "",
   });
 
   useEffect(() => {
-    getAdvertising();
+    getProducts();
   }, []);
 
-  const getAdvertising = async () => {
-    const data = await api("get", "/advertising");
-    setData([{ advertise: data.advertise }]);
-    console.log("====", data.advertise);
+  const getProducts = async () => {
+    const data = await api("get", "/product");
+    setData(data.products);
+    console.log("====", data.products);
   };
 
   const handleModal = () => {
@@ -72,13 +68,11 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setadvertising({
+      setProduct({
         _id: item._id,
         title: item.title,
-        text: item.text,
+        description: item.description,
         image: item.image,
-        textbottom: item.textbottom,
-        contactbutton: item.contactbutton,
       });
     }
 
@@ -86,10 +80,10 @@ const Advertising = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("Advertising deleted successfully");
-      getAdvertising();
+  const handleDelete = () => {
+    api("delete", "/product").then(() => {
+      toast.success("Product deleted successfully");
+      getProducts();
     });
   };
 
@@ -104,7 +98,7 @@ const Advertising = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Advertising</h3>
+                  <h3 className="mb-0">Products</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -112,7 +106,7 @@ const Advertising = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Advertising
+                    Add Product
                   </Button>
                 </div>
               </CardHeader>
@@ -120,99 +114,85 @@ const Advertising = ({ status }) => {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Title</th>
-                    <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
+                    <th scope="col">Desoncripti</th>
+                    <th scope="col">Image</th>
 
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
-                    return (
-                      <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.title}>
-                                {item.title?.length > 30
-                                  ? item.title?.substring(0, 30) + "..."
-                                  : item.title}
-                              </span>
-                            </Media>
-                          </Media>
-                        </th>
-                        <td title={item.text}>
-                          {item.text?.length > 30
-                            ? item.text?.substring(0, 30) + "..."
-                            : item.text}
-                        </td>
+                  {Object.keys(data).length > 0 ? (
+                    <tr>
+                      <td title={data.title}>
+                        {data.title?.length > 30
+                          ? data.title?.substring(0, 30) + "..."
+                          : data.title}
+                      </td>
+                      <td title={data.description}>
+                        {data.description?.length > 30
+                          ? data.description?.substring(0, 30) + "..."
+                          : data.description}
+                      </td>
+                      <td title={data.image}>
+                        {data.image?.length > 30
+                          ? data.image?.substring(0, 30) + "..."
+                          : data.image}
+                      </td>
 
-                        <td title={item.contactbutton}>
-                          {item.contactbutton?.length > 30
-                            ? item.contactbutton?.substring(0, 30) + "..."
-                            : item.contactbutton}
-                        </td>
-                        <td className="text-right">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
                               href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
+                              onClick={() => handleEditModal(data)}
                             >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              {/* {item.test_conducted && (
-                                <DropdownItem
-                                  onClick={() =>
-                                    history.push(`/admin/users/${item._id}`)
-                                  }
-                                >
-                                  View
-                                </DropdownItem>
-                              )} */}
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={() => handleEditModal(item)}
-                              >
-                                Edit
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                className="text-danger"
-                                onClick={() => handleDelete(item._id)}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              className="text-danger"
+                              onClick={() => handleDelete(data._id)}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>N/A</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>
           </div>
         </Row>
         {openModal && (
-          <AddAdvertising
+          <AddProducts
             openModal={openModal}
             handleModal={handleModal}
-            getAdvertising={getAdvertising}
+            getProducts={getProducts}
           />
         )}
         {editModal && (
-          <EditAdvertising
+          <EditProducts
             openModal={editModal}
             handleModal={handleEditModal}
-            advertising={advertising}
-            setadvertising={setadvertising}
-            getAdvertising={getAdvertising}
+            product={product}
+            setProduct={setProduct}
+            getProducts={getProducts}
           />
         )}
       </Container>
@@ -220,4 +200,4 @@ const Advertising = ({ status }) => {
   );
 };
 
-export default Advertising;
+export default Products;

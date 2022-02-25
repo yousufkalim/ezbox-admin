@@ -15,51 +15,39 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 // core components
 
 const { Option } = Select;
 
-const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
-  let [advertising, setAdvertising] = useState({
-    title: "",
+const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
+  let [home, setHome] = useState({
     text: "",
     image: "",
-    textbottom: "",
-    contactbutton: true,
+    yt_link: "",
   });
 
   const handleInput = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.value });
+    setHome({ ...home, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.files[0] });
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    api("post", "/image", formData).then((res) => {
+      toast.success("Image uploaded successfully");
+      setHome({ ...home, [e.target.name]: res.url });
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (advertising.name == "") {
-    //   return toast.error("Please enter user's name");
-    // }
+    if (!(home.text && home.image && home.yt_link)) {
+      return toast.error("All fields are required");
+    }
 
-    // if (user.email == "") {
-    //   return toast.error("Please enter email");
-    // }
-    // if (!(user.email.includes(".") && user.email.includes("@"))) {
-    //   return toast.error("Please enter a valid email");
-    // }
-    // if (user.password == "") {
-    //   return toast.error("Password is required");
-    // }
-    // if (user.password.length < 8) {
-    //   return toast.error("Passwords should be of atleast 8 letters");
-    // }
-    // if (user.number == "") {
-    //   return toast.error("Contact no. is required");
-    // }
-
-    api("post", "/advertising", advertising).then((res) => {
-      toast.success("Advertising added successfully");
-      getAdvertising();
+    api("post", "/homeScreen", home).then((res) => {
+      toast.success("Home Screen Content added successfully");
+      getHome();
       handleModal();
     });
   };
@@ -68,7 +56,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add a user
+          Add HomeScreen
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -76,21 +64,18 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="12">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
+                        <label className="form-control-label" htmlFor="Image">
                           <span style={{ color: "red" }}>
-                            {advertising.image ? "" : "*"}
+                            {home.image ? "" : "*"}
                           </span>{" "}
-                          Add Image <i className="ni ni-album-2" />
+                          Image <i className="ni ni-album-2" />
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="input-image"
-                          name="profile_pic"
+                          id="Image"
+                          name="image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -104,80 +89,39 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.title ? "" : "*"}{" "}
-                          </span>
-                          Title
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter advertising's title here"
-                          type="text"
-                          value={advertising.title}
-                          name="title"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {advertising.text ? "" : "*"}{" "}
+                            {home.text ? "" : "*"}{" "}
                           </span>
                           Text
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's text here"
+                          placeholder="Enter home's text here"
                           type="text"
-                          value={advertising.text}
+                          value={home.text}
                           name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
+
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.textbottom ? "" : "*"}{" "}
+                            {home.yt_link ? "" : "*"}{" "}
                           </span>
-                          Text Bottom
+                          Youtube URL
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's textbottom here"
+                          placeholder="Enter Youtube URL here"
                           type="text"
-                          value={advertising.textbottom}
-                          name="textbottom"
+                          value={home.yt_link}
+                          name="yt_link"
                           onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          <span style={{ color: "red" }}>
-                            {advertising.number ? "" : "*"}{" "}
-                          </span>{" "}
-                          Contact no.
-                        </label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter advertising's contact here"
-                          type="phone"
-                          value={advertising.number}
-                          name="number"
-                          onChange={handleInput}
-                          maxLength="11"
                         />
                       </FormGroup>
                     </Col>
@@ -199,4 +143,4 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
   );
 };
 
-export default AddAdvertising;
+export default AddHomeScreen;

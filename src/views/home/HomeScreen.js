@@ -36,33 +36,30 @@ import {
 } from "reactstrap";
 
 // core components
-import AddAdvertising from "./AddHomeScreen";
-import EditAdvertising from "./EditHomeScreen";
+import AddHomeScreen from "./AddHomeScreen";
+import EditHomeScreen from "./EditHomeScreen";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Advertising = ({ status }) => {
+const HomeScreen = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const history = useHistory();
-  const [data, setData] = useState([]);
-  const [advertising, setadvertising] = useState({
-    _id: "",
-    title: "",
+  const [data, setData] = useState({});
+
+  let [home, setHome] = useState({
     text: "",
     image: "",
-    textbottom: "",
-    contactbutton: "",
+    yt_link: "",
   });
 
   useEffect(() => {
-    getAdvertising();
+    getHome();
   }, []);
 
-  const getAdvertising = async () => {
-    const data = await api("get", "/advertising");
-    setData([{ advertise: data.advertise }]);
-    console.log("====", data.advertise);
+  const getHome = async () => {
+    const data = await api("get", "/homeScreen");
+    setData(data.home);
+    console.log("====", data.home);
   };
 
   const handleModal = () => {
@@ -72,13 +69,10 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setadvertising({
-        _id: item._id,
-        title: item.title,
+      setHome({
         text: item.text,
         image: item.image,
-        textbottom: item.textbottom,
-        contactbutton: item.contactbutton,
+        yt_link: item.yt_link,
       });
     }
 
@@ -86,10 +80,10 @@ const Advertising = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("Advertising deleted successfully");
-      getAdvertising();
+  const handleDelete = () => {
+    api("delete", "/homeScreen").then(() => {
+      toast.success("HomeScreen Content deleted successfully");
+      getHome();
     });
   };
 
@@ -104,7 +98,7 @@ const Advertising = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Advertising</h3>
+                  <h3 className="mb-0">Home Screen</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -112,61 +106,53 @@ const Advertising = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Advertising
+                    Add Home Screen
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
                     <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Youtube URL</th>
 
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
-                    return (
-                      <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.title}>
-                                {item.title?.length > 30
-                                  ? item.title?.substring(0, 30) + "..."
-                                  : item.title}
-                              </span>
-                            </Media>
-                          </Media>
-                        </th>
-                        <td title={item.text}>
-                          {item.text?.length > 30
-                            ? item.text?.substring(0, 30) + "..."
-                            : item.text}
-                        </td>
+                  {Object.keys(data).length > 0 ? (
+                    <tr>
+                      <td title={data.text}>
+                        {data.text?.length > 30
+                          ? data.text?.substring(0, 30) + "..."
+                          : data.text}
+                      </td>
+                      <td title={data.image}>
+                        {data.image?.length > 30
+                          ? data.image?.substring(0, 30) + "..."
+                          : data.image}
+                      </td>
+                      <td title={data.yt_link}>
+                        {data.yt_link?.length > 30
+                          ? data.yt_link?.substring(0, 30) + "..."
+                          : data.yt_link}
+                      </td>
 
-                        <td title={item.contactbutton}>
-                          {item.contactbutton?.length > 30
-                            ? item.contactbutton?.substring(0, 30) + "..."
-                            : item.contactbutton}
-                        </td>
-                        <td className="text-right">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              {/* {item.test_conducted && (
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            {/* {item.test_conducted && (
                                 <DropdownItem
                                   onClick={() =>
                                     history.push(`/admin/users/${item._id}`)
@@ -175,44 +161,47 @@ const Advertising = ({ status }) => {
                                   View
                                 </DropdownItem>
                               )} */}
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={() => handleEditModal(item)}
-                              >
-                                Edit
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                className="text-danger"
-                                onClick={() => handleDelete(item._id)}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => handleEditModal(data)}
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              className="text-danger"
+                              onClick={() => handleDelete(data._id)}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>N/A</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>
           </div>
         </Row>
         {openModal && (
-          <AddAdvertising
+          <AddHomeScreen
             openModal={openModal}
             handleModal={handleModal}
-            getAdvertising={getAdvertising}
+            getHome={getHome}
           />
         )}
         {editModal && (
-          <EditAdvertising
+          <EditHomeScreen
             openModal={editModal}
             handleModal={handleEditModal}
-            advertising={advertising}
-            setadvertising={setadvertising}
-            getAdvertising={getAdvertising}
+            home={home}
+            setHome={setHome}
+            getHome={getHome}
           />
         )}
       </Container>
@@ -220,4 +209,4 @@ const Advertising = ({ status }) => {
   );
 };
 
-export default Advertising;
+export default HomeScreen;

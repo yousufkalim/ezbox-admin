@@ -37,22 +37,17 @@ import {
 
 // core components
 import AddContact from "./AddContact";
-import EditContact from "./EditContact";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
 const Contact = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
-  const history = useHistory();
   const [data, setData] = useState([]);
-  const [contact, setContact] = useState({
-    _id: "",
-    title: "",
-    text: "",
-    image: "",
-    textbottom: "",
-    contactbutton: "",
+  let [contact, setContact] = useState({
+    name: "",
+    number: "",
+    email: "",
+    message: "",
   });
 
   useEffect(() => {
@@ -61,8 +56,7 @@ const Contact = ({ status }) => {
 
   const getContact = async () => {
     const data = await api("get", "/contact");
-    setData([{ contact: data.contact }]);
-    console.log("====", data.contact);
+    setData(data.messages);
   };
 
   const handleModal = () => {
@@ -70,25 +64,9 @@ const Contact = ({ status }) => {
     return openModal;
   };
 
-  const handleEditModal = (item) => {
-    if (item) {
-      setContact({
-        _id: item._id,
-        title: item.title,
-        text: item.text,
-        image: item.image,
-        textbottom: item.textbottom,
-        contactbutton: item.contactbutton,
-      });
-    }
-
-    setEditModal((open) => !open);
-    return openModal;
-  };
-
   const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("contact deleted successfully");
+    api("delete", "/contact").then(() => {
+      toast.success("Contact deleted successfully");
       getContact();
     });
   };
@@ -104,7 +82,7 @@ const Contact = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">contact</h3>
+                  <h3 className="mb-0">Contact</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -112,17 +90,17 @@ const Contact = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add contact
+                    Add Contact
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Message</th>
 
                     <th scope="col" />
                   </tr>
@@ -131,27 +109,27 @@ const Contact = ({ status }) => {
                   {data?.map((item) => {
                     return (
                       <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.title}>
-                                {item.title?.length > 30
-                                  ? item.title?.substring(0, 30) + "..."
-                                  : item.title}
-                              </span>
-                            </Media>
-                          </Media>
-                        </th>
-                        <td title={item.text}>
-                          {item.text?.length > 30
-                            ? item.text?.substring(0, 30) + "..."
-                            : item.text}
+                        <td title={item.name}>
+                          {item.name?.length > 30
+                            ? item.name?.substring(0, 30) + "..."
+                            : item.name}
                         </td>
 
-                        <td title={item.contactbutton}>
-                          {item.contactbutton?.length > 30
-                            ? item.contactbutton?.substring(0, 30) + "..."
-                            : item.contactbutton}
+                        <td title={item.number}>
+                          {item.number?.length > 30
+                            ? item.number?.substring(0, 30) + "..."
+                            : item.number}
+                        </td>
+                        <td title={item.email}>
+                          {item.email?.length > 30
+                            ? item.email?.substring(0, 30) + "..."
+                            : item.email}
+                        </td>
+
+                        <td title={item.message}>
+                          {item.message?.length > 30
+                            ? item.message?.substring(0, 30) + "..."
+                            : item.message}
                         </td>
                         <td className="text-right">
                           <UncontrolledDropdown>
@@ -166,21 +144,6 @@ const Contact = ({ status }) => {
                               <i className="fas fa-ellipsis-v" />
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
-                              {/* {item.test_conducted && (
-                                <DropdownItem
-                                  onClick={() =>
-                                    history.push(`/admin/users/${item._id}`)
-                                  }
-                                >
-                                  View
-                                </DropdownItem>
-                              )} */}
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={() => handleEditModal(item)}
-                              >
-                                Edit
-                              </DropdownItem>
                               <DropdownItem
                                 href="#pablo"
                                 className="text-danger"
@@ -203,15 +166,6 @@ const Contact = ({ status }) => {
           <AddContact
             openModal={openModal}
             handleModal={handleModal}
-            getContact={getContact}
-          />
-        )}
-        {editModal && (
-          <EditContact
-            openModal={editModal}
-            handleModal={handleEditModal}
-            contact={contact}
-            setContact={setContact}
             getContact={getContact}
           />
         )}

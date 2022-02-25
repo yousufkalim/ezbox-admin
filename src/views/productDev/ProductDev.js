@@ -36,33 +36,32 @@ import {
 } from "reactstrap";
 
 // core components
-import AddAdvertising from "./AddProductDev";
-import EditAdvertising from "./EditProductDev";
+import AddProductDev from "./AddProductDev";
+import EditProductDev from "./EditProductDev";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Advertising = ({ status }) => {
+const ProductDev = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const history = useHistory();
-  const [data, setData] = useState([]);
-  const [advertising, setadvertising] = useState({
+  const [data, setData] = useState({});
+  const [productDev, setProductDev] = useState({
     _id: "",
-    title: "",
     text: "",
-    image: "",
-    textbottom: "",
-    contactbutton: "",
+    leftImg: "",
+    centerImg: "",
+    rightImg: "",
   });
 
   useEffect(() => {
-    getAdvertising();
+    getProductDev();
   }, []);
 
-  const getAdvertising = async () => {
-    const data = await api("get", "/advertising");
-    setData([{ advertise: data.advertise }]);
-    console.log("====", data.advertise);
+  const getProductDev = async () => {
+    const data = await api("get", "/productDev");
+    setData(data.productDev);
+    console.log("====", data.productDev);
   };
 
   const handleModal = () => {
@@ -72,13 +71,11 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setadvertising({
-        _id: item._id,
-        title: item.title,
+      setProductDev({
         text: item.text,
-        image: item.image,
-        textbottom: item.textbottom,
-        contactbutton: item.contactbutton,
+        leftImg: item.leftImg,
+        centerImg: item.centerImg,
+        rightImg: item.rightImg,
       });
     }
 
@@ -86,10 +83,10 @@ const Advertising = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("Advertising deleted successfully");
-      getAdvertising();
+  const handleDelete = () => {
+    api("delete", "/productDev").then(() => {
+      toast.success("Product Dev deleted successfully");
+      getProductDev();
     });
   };
 
@@ -104,7 +101,7 @@ const Advertising = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Advertising</h3>
+                  <h3 className="mb-0">Product Development</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -112,61 +109,59 @@ const Advertising = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Advertising
+                    Add Product Development
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
                     <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
+                    <th scope="col">Left Image</th>
+                    <th scope="col">Center Image</th>
+                    <th scope="col">Right Image</th>
 
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
-                    return (
-                      <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.title}>
-                                {item.title?.length > 30
-                                  ? item.title?.substring(0, 30) + "..."
-                                  : item.title}
-                              </span>
-                            </Media>
-                          </Media>
-                        </th>
-                        <td title={item.text}>
-                          {item.text?.length > 30
-                            ? item.text?.substring(0, 30) + "..."
-                            : item.text}
-                        </td>
+                  {Object.keys(data).length > 0 ? (
+                    <tr>
+                      <td title={data.text}>
+                        {data.text?.length > 30
+                          ? data.text?.substring(0, 30) + "..."
+                          : data.text}
+                      </td>
+                      <td title={data.leftImg}>
+                        {data.leftImg?.length > 30
+                          ? data.leftImg?.substring(0, 30) + "..."
+                          : data.leftImg}
+                      </td>
+                      <td title={data.centerImg}>
+                        {data.centerImg?.length > 30
+                          ? data.centerImg?.substring(0, 30) + "..."
+                          : data.centerImg}
+                      </td>
+                      <td title={data.rightImg}>
+                        {data.rightImg?.length > 30
+                          ? data.rightImg?.substring(0, 30) + "..."
+                          : data.rightImg}
+                      </td>
 
-                        <td title={item.contactbutton}>
-                          {item.contactbutton?.length > 30
-                            ? item.contactbutton?.substring(0, 30) + "..."
-                            : item.contactbutton}
-                        </td>
-                        <td className="text-right">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              {/* {item.test_conducted && (
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            {/* {item.test_conducted && (
                                 <DropdownItem
                                   onClick={() =>
                                     history.push(`/admin/users/${item._id}`)
@@ -175,44 +170,47 @@ const Advertising = ({ status }) => {
                                   View
                                 </DropdownItem>
                               )} */}
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={() => handleEditModal(item)}
-                              >
-                                Edit
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                className="text-danger"
-                                onClick={() => handleDelete(item._id)}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => handleEditModal(data)}
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              className="text-danger"
+                              onClick={() => handleDelete(data._id)}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>N/A</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>
           </div>
         </Row>
         {openModal && (
-          <AddAdvertising
+          <AddProductDev
             openModal={openModal}
             handleModal={handleModal}
-            getAdvertising={getAdvertising}
+            getProductDev={getProductDev}
           />
         )}
         {editModal && (
-          <EditAdvertising
+          <EditProductDev
             openModal={editModal}
             handleModal={handleEditModal}
-            advertising={advertising}
-            setadvertising={setadvertising}
-            getAdvertising={getAdvertising}
+            productDev={productDev}
+            setProductDev={setProductDev}
+            getProductDev={getProductDev}
           />
         )}
       </Container>
@@ -220,4 +218,4 @@ const Advertising = ({ status }) => {
   );
 };
 
-export default Advertising;
+export default ProductDev;
