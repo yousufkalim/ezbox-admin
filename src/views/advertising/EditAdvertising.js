@@ -44,13 +44,14 @@ const EditAdvertising = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      advertising.title ||
-      advertising.text ||
-      advertising.leftImg ||
-      advertising.rightImg ||
-      advertising.centerImg ||
-      advertising.textbottom ||
-      advertising.contactbutton == ""
+      !(
+        advertising.title &&
+        advertising.text &&
+        advertising.leftImg &&
+        advertising.rightImg &&
+        advertising.centerImg &&
+        advertising.textbottom
+      )
     ) {
       return toast.error("All fields are required");
     }
@@ -202,7 +203,6 @@ const EditAdvertising = ({
                           class="custom-control-input"
                           id={`customCheck1${advertising.contactbutton}`}
                           className="custom-control-input"
-                          type="checkbox"
                           checked={advertising.contactbutton}
                           onChange={handleOnChange}
                         />

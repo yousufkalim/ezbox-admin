@@ -80,8 +80,8 @@ const Products = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = () => {
-    api("delete", "/product").then(() => {
+  const handleDelete = (id) => {
+    api("delete", `/product/${id}`).then(() => {
       toast.success("Product deleted successfully");
       getProducts();
     });
@@ -113,9 +113,9 @@ const Products = ({ status }) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Desoncripti</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
 
                     <th scope="col" />
                   </tr>
@@ -123,6 +123,28 @@ const Products = ({ status }) => {
                 <tbody>
                   {Object.keys(data).length > 0 ? (
                     <tr>
+                      <td title={data.image}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.image ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="logo"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.image
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
+                        </Media>
+                      </td>
                       <td title={data.title}>
                         {data.title?.length > 30
                           ? data.title?.substring(0, 30) + "..."
@@ -132,11 +154,6 @@ const Products = ({ status }) => {
                         {data.description?.length > 30
                           ? data.description?.substring(0, 30) + "..."
                           : data.description}
-                      </td>
-                      <td title={data.image}>
-                        {data.image?.length > 30
-                          ? data.image?.substring(0, 30) + "..."
-                          : data.image}
                       </td>
 
                       <td className="text-right">

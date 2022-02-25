@@ -113,8 +113,8 @@ const HomeScreen = ({ status }) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Text</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Text</th>
                     <th scope="col">Youtube URL</th>
 
                     <th scope="col" />
@@ -123,15 +123,32 @@ const HomeScreen = ({ status }) => {
                 <tbody>
                   {Object.keys(data).length > 0 ? (
                     <tr>
+                      <td title={data.image}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.image ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="Image"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.image
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
+                        </Media>
+                      </td>
                       <td title={data.text}>
                         {data.text?.length > 30
                           ? data.text?.substring(0, 30) + "..."
                           : data.text}
-                      </td>
-                      <td title={data.image}>
-                        {data.image?.length > 30
-                          ? data.image?.substring(0, 30) + "..."
-                          : data.image}
                       </td>
                       <td title={data.yt_link}>
                         {data.yt_link?.length > 30

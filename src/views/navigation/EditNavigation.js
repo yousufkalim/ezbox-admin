@@ -38,9 +38,17 @@ const EditNavigation = ({
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(navigation.text && navigation.image && navigation.textbottom)) {
-      return toast.error("All fields are required");
+
+    if (!navigation.blog) {
+      return toast.error("Blog is  required");
     }
+    if (!navigation.forum) {
+      return toast.error("Forum is  required");
+    }
+    if (!navigation.logo) {
+      return toast.error("Logo is  required");
+    }
+
     api("post", "/navigation ", navigation).then((res) => {
       toast.success("navigation  edited successfully");
       getNavigation();

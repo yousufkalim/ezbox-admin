@@ -37,9 +37,9 @@ const AdminNavbar = () => {
           <NavbarBrand to="/auth/login" tag={Link}>
             {/* <img
               alt="..."
-              src={require("../../assets/img/brand/passtotrip.png").default}
+              src={require("../../assets/img/brand/Ezbox.png").default}
             /> */}
-            <strong>Tajweed Admin</strong>
+            <strong>Ezbox Admin</strong>
           </NavbarBrand>
           <button className="navbar-toggler" id="navbar-collapse-main">
             <span className="navbar-toggler-icon" />

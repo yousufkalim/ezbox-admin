@@ -43,10 +43,14 @@ const EditReview = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(review.text && review.image && review.textbottom)) {
+    if (!(review.name && review.image && review.message)) {
       return toast.error("All fields are required");
     }
-    api("post", "/review ", review).then((res) => {
+
+    if (!review.rating) {
+      return toast.error("Rating should be in number");
+    }
+    api("put", `/reviews/${review._id}`, review).then((res) => {
       toast.success("review  edited successfully");
       getReviews();
       handleModal();
@@ -128,7 +132,7 @@ const EditReview = ({
                     </Col>{" "}
                   </Row>
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}

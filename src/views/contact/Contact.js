@@ -65,7 +65,7 @@ const Contact = ({ status }) => {
   };
 
   const handleDelete = (id) => {
-    api("delete", "/contact").then(() => {
+    api("delete", `/contact/${id}`).then(() => {
       toast.success("Contact deleted successfully");
       getContact();
     });
@@ -82,16 +82,7 @@ const Contact = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Contact</h3>
-                  <Button
-                    color="primary"
-                    href="#pablo"
-                    onClick={handleModal}
-                    size="md"
-                  >
-                    <i className="ni ni-fat-add"></i>
-                    Add Contact
-                  </Button>
+                  <h3 className="mb-0">Contacts</h3>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -134,24 +125,14 @@ const Contact = ({ status }) => {
                         <td className="text-right">
                           <UncontrolledDropdown>
                             <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
+                              className="btn-icon-only text-dark"
                               role="button"
                               size="sm"
                               color=""
-                              onClick={(e) => e.preventDefault()}
+                              onClick={() => handleDelete(item._id)}
                             >
-                              <i className="fas fa-ellipsis-v" />
+                              <i className="fas fa-trash text-red" />
                             </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              <DropdownItem
-                                href="#pablo"
-                                className="text-danger"
-                                onClick={() => handleDelete(item._id)}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
                           </UncontrolledDropdown>
                         </td>
                       </tr>

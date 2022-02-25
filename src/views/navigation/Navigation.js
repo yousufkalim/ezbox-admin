@@ -59,10 +59,10 @@ const Navigation = ({ status }) => {
   });
 
   useEffect(() => {
-    getnavigation();
+    getNavigation();
   }, []);
 
-  const getnavigation = async () => {
+  const getNavigation = async () => {
     const data = await api("get", "/navigation");
     setData(data.navigation);
     console.log("====", data.navigation);
@@ -96,7 +96,7 @@ const Navigation = ({ status }) => {
   const handleDelete = () => {
     api("delete", "/navigation").then(() => {
       toast.success("navigation deleted successfully");
-      getnavigation();
+      getNavigation();
     });
   };
 
@@ -128,8 +128,8 @@ const Navigation = ({ status }) => {
                   <tr>
                     <th scope="col">Logo</th>
                     <th scope="col">Blog</th>
-                    <th scope="col">Email</th>
                     <th scope="col">Forum</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Facebook</th>
                     <th scope="col">Instagram</th>
                     <th scope="col">Whatsapp</th>
@@ -145,13 +145,24 @@ const Navigation = ({ status }) => {
                     <tr>
                       <th scope="row">
                         <Media className="align-items-center">
-                          <Media>
-                            <span className="mb-0 text-sm" title={data.logo}>
-                              {data.logo?.length > 30
-                                ? data.logo?.substring(0, 30) + "..."
-                                : data.logo}
-                            </span>
-                          </Media>
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.logo ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="logo"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.logo
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
                         </Media>
                       </th>
                       <td title={data.blog}>
@@ -159,16 +170,16 @@ const Navigation = ({ status }) => {
                           ? data.blog?.substring(0, 30) + "..."
                           : data.blog}
                       </td>
-                      <td title={data.email}>
-                        {data.email?.length > 30
-                          ? data.email?.substring(0, 30) + "..."
-                          : data.email}
-                      </td>{" "}
                       <td title={data.forum}>
                         {data.forum?.length > 30
                           ? data.forum?.substring(0, 30) + "..."
                           : data.forum}
                       </td>
+                      <td title={data.email}>
+                        {data.email?.length > 30
+                          ? data.email?.substring(0, 30) + "..."
+                          : data.email}
+                      </td>{" "}
                       <td title={data.facebook}>
                         {data.facebook?.length > 30
                           ? data.facebook?.substring(0, 30) + "..."
@@ -252,7 +263,7 @@ const Navigation = ({ status }) => {
           <AddNavigation
             openModal={openModal}
             handleModal={handleModal}
-            getnavigation={getnavigation}
+            getNavigation={getNavigation}
           />
         )}
         {editModal && (
@@ -261,7 +272,7 @@ const Navigation = ({ status }) => {
             handleModal={handleEditModal}
             navigation={navigation}
             setNavigation={setNavigation}
-            getnavigation={getnavigation}
+            getNavigation={getNavigation}
           />
         )}
       </Container>

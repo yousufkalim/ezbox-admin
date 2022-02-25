@@ -67,7 +67,7 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                         <Input
                           className="form-control-file form"
                           id="Image"
-                          name="Image"
+                          name="image"
                           type="file"
                           onChange={handleFileChange}
                         />

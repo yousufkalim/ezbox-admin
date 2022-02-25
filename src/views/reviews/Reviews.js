@@ -82,8 +82,8 @@ const Reviews = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = () => {
-    api("delete", "/reviews").then(() => {
+  const handleDelete = (id) => {
+    api("delete", `/reviews/${id}`).then(() => {
       toast.success("review deleted successfully");
       getReviews();
     });
@@ -115,6 +115,7 @@ const Reviews = ({ status }) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Rating</th>
                     <th scope="col">Message</th>
@@ -125,6 +126,28 @@ const Reviews = ({ status }) => {
                   {data.map((item) => {
                     return (
                       <tr>
+                        <td title={item.image}>
+                          <Media className="align-items-center">
+                            <a
+                              className="avatar rounded-circle mr-3"
+                              href="#pablo"
+                            >
+                              {item.image ? (
+                                <img
+                                  className="rounded-circle"
+                                  style={{ width: "100%", height: "100%" }}
+                                  alt="logo"
+                                  src={
+                                    process.env.REACT_APP_SERVER_MEDIA_URL +
+                                    item.image
+                                  }
+                                />
+                              ) : (
+                                <i className="ni ni-circle-08" />
+                              )}
+                            </a>
+                          </Media>
+                        </td>
                         <td title={item.name}>
                           {item.name?.length > 30
                             ? item.name?.substring(0, 30) + "..."

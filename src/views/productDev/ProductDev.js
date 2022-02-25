@@ -116,10 +116,10 @@ const ProductDev = ({ status }) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Text</th>
                     <th scope="col">Left Image</th>
                     <th scope="col">Center Image</th>
                     <th scope="col">Right Image</th>
+                    <th scope="col">Text</th>
 
                     <th scope="col" />
                   </tr>
@@ -127,25 +127,76 @@ const ProductDev = ({ status }) => {
                 <tbody>
                   {Object.keys(data).length > 0 ? (
                     <tr>
+                      <td title={data.leftImg}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.leftImg ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="logo"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.leftImg
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
+                        </Media>
+                      </td>
+                      <td title={data.centerImg}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.centerImg ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="logo"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.centerImg
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
+                        </Media>
+                      </td>
+                      <td title={data.rightImg}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            href="#pablo"
+                          >
+                            {data.rightImg ? (
+                              <img
+                                className="rounded-circle"
+                                style={{ width: "100%", height: "100%" }}
+                                alt="logo"
+                                src={
+                                  process.env.REACT_APP_SERVER_MEDIA_URL +
+                                  data.rightImg
+                                }
+                              />
+                            ) : (
+                              <i className="ni ni-circle-08" />
+                            )}
+                          </a>
+                        </Media>
+                      </td>
                       <td title={data.text}>
                         {data.text?.length > 30
                           ? data.text?.substring(0, 30) + "..."
                           : data.text}
-                      </td>
-                      <td title={data.leftImg}>
-                        {data.leftImg?.length > 30
-                          ? data.leftImg?.substring(0, 30) + "..."
-                          : data.leftImg}
-                      </td>
-                      <td title={data.centerImg}>
-                        {data.centerImg?.length > 30
-                          ? data.centerImg?.substring(0, 30) + "..."
-                          : data.centerImg}
-                      </td>
-                      <td title={data.rightImg}>
-                        {data.rightImg?.length > 30
-                          ? data.rightImg?.substring(0, 30) + "..."
-                          : data.rightImg}
                       </td>
 
                       <td className="text-right">

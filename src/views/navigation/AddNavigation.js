@@ -58,7 +58,7 @@ const AddNavigation = ({ openModal, handleModal, getNavigation }) => {
       return toast.error("Logo is  required");
     }
 
-    api("post", "/   navigation", navigation).then((res) => {
+    api("post", "/navigation", navigation).then((res) => {
       toast.success("   navigation added successfully");
       getNavigation();
       handleModal();

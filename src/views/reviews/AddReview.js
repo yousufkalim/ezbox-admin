@@ -46,11 +46,15 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(review.name && review.image && review.rating && review.message)) {
+    if (!(review.name && review.image && review.message)) {
       return toast.error("All fields are required");
     }
 
-    api("post", "/review", review).then((res) => {
+    if (!review.rating) {
+      return toast.error("Rating should be in number");
+    }
+
+    api("post", "/reviews", review).then((res) => {
       toast.success("review added successfully");
       getReviews();
       handleModal();
@@ -132,7 +136,7 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                     </Col>{" "}
                   </Row>
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
