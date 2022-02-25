@@ -50,13 +50,14 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      (advertising.title ||
-        advertising.text ||
-        advertising.leftImg ||
-        advertising.rightImg ||
-        advertising.centerImg ||
-        advertising.textbottom ||
-        advertising.contactbutton) == ""
+      !(
+        advertising.title &&
+        advertising.text &&
+        advertising.leftImg &&
+        advertising.rightImg &&
+        advertising.centerImg &&
+        advertising.textbottom
+      )
     ) {
       return toast.error("All fields are required");
     }

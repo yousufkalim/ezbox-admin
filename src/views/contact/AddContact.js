@@ -15,50 +15,31 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 // core components
 
 const { Option } = Select;
 
 const AddContact = ({ openModal, handleModal, getContact }) => {
   let [contact, setContact] = useState({
-    title: "",
-    text: "",
-    image: "",
-    textbottom: "",
-    contactbutton: true,
+    name: "",
+    number: "",
+    email: "",
+    message: "",
   });
 
   const handleInput = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
-  const handleFileChange = (e) => {
-    setContact({ ...contact, [e.target.name]: e.target.files[0] });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (Contact.name == "") {
-    //   return toast.error("Please enter user's name");
-    // }
-
-    // if (user.email == "") {
-    //   return toast.error("Please enter email");
-    // }
-    // if (!(user.email.includes(".") && user.email.includes("@"))) {
-    //   return toast.error("Please enter a valid email");
-    // }
-    // if (user.password == "") {
-    //   return toast.error("Password is required");
-    // }
-    // if (user.password.length < 8) {
-    //   return toast.error("Passwords should be of atleast 8 letters");
-    // }
-    // if (user.number == "") {
-    //   return toast.error("Contact no. is required");
-    // }
+    if (!(contact.name && contact.number && contact.email && contact.message)) {
+      return toast.error("All fields are required");
+    }
 
     api("post", "/contact", contact).then((res) => {
-      toast.success("Contact added successfully");
+      toast.success("contact added successfully");
       getContact();
       handleModal();
     });
@@ -68,7 +49,7 @@ const AddContact = ({ openModal, handleModal, getContact }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add a user
+          Add contact
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -76,108 +57,88 @@ const AddContact = ({ openModal, handleModal, getContact }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="12">
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {contact.name ? "" : "*"}{" "}
+                          </span>
+                          Name
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter contact's name here"
+                          type="text"
+                          value={contact.name}
+                          name="name"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
                       <FormGroup>
                         <label
                           className="form-control-label"
-                          htmlFor="input-image"
+                          htmlFor="input-phone"
                         >
                           <span style={{ color: "red" }}>
-                            {contact.image ? "" : "*"}
+                            {contact.number ? "" : "*"}
                           </span>{" "}
-                          Add Image <i className="ni ni-album-2" />
+                          Phone Number
                         </label>
                         <Input
-                          className="form-control-file form"
-                          id="input-image"
-                          name="profile_pic"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {contact.title ? "" : "*"}{" "}
-                          </span>
-                          Title
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter Contact's title here"
+                          className="form-control-alternative"
+                          id="input-phone"
+                          placeholder="+33123456789"
                           type="text"
-                          value={contact.title}
-                          name="title"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {contact.text ? "" : "*"}{" "}
-                          </span>
-                          Text
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter Contact's text here"
-                          type="text"
-                          value={contact.text}
-                          name="text"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {contact.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Text Bottom
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter Contact's textbottom here"
-                          type="text"
-                          value={contact.textbottom}
-                          name="textbottom"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          <span style={{ color: "red" }}>
-                            {contact.number ? "" : "*"}{" "}
-                          </span>{" "}
-                          Contact no.
-                        </label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter Contact's contact here"
-                          type="phone"
                           value={contact.number}
                           name="number"
                           onChange={handleInput}
-                          maxLength="11"
+                          maxLength={14}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {contact.email ? "" : "*"}{" "}
+                          </span>
+                          Email
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter contact's email here"
+                          type="text"
+                          value={contact.email}
+                          name="email"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {contact.message ? "" : "*"}{" "}
+                          </span>
+                          message
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter contact's message here"
+                          type="text"
+                          value={contact.message}
+                          name="message"
+                          onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>

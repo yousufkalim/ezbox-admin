@@ -18,42 +18,37 @@ import {
 
 const { Option } = Select;
 
-const EditAdvertising = ({
+const EditConsulting = ({
   openModal,
   handleModal,
-  user,
-  setUser,
-  getUsers,
+  consulting,
+  setConsulting,
+  getConsulting,
 }) => {
   const handleInput = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setConsulting({ ...consulting, [e.target.name]: e.target.value });
+  };
+  const handleFileChange = (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    api("post", "/image", formData).then((res) => {
+      toast.success("Image uploaded successfully");
+      setConsulting({ ...consulting, [e.target.name]: res.url });
+    });
+  };
+
+  const handleOnChange = () => {
+    setConsulting((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (user.name == "") {
-      return toast.error("Please enter user's name");
+    if (!(consulting.text && consulting.image && consulting.textbottom)) {
+      return toast.error("All fields are required");
     }
-
-    if (user.email == "") {
-      return toast.error("Please enter email");
-    }
-    if (!(user.email.includes(".") && user.email.includes("@"))) {
-      return toast.error("Please enter a valid email");
-    }
-
-    if (user.password && user.password.length < 8) {
-      return toast.error("Passwords should be of atleast 8 letters");
-    }
-
-    if (user.number == "") {
-      return toast.error("Contact no. is required");
-    }
-
-    api("put", `/users/${user._id}`, user).then((res) => {
-      toast.success("user edited successfully");
-      getUsers();
+    api("post", "/consulting ", consulting).then((res) => {
+      toast.success("consulting  edited successfully");
+      getConsulting();
       handleModal();
     });
   };
@@ -62,7 +57,7 @@ const EditAdvertising = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit a user
+          Edit consulting
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -70,127 +65,85 @@ const EditAdvertising = ({
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="4">
                       <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.name ? "" : "*"}{" "}
-                        </span>
-                        <label className="form-control-label">Name</label>
+                        <label className="form-control-label" htmlFor="image">
+                          <span style={{ color: "red" }}>
+                            {consulting.image ? "" : "*"}
+                          </span>{" "}
+                          Image <i className="ni ni-album-2" />
+                        </label>
                         <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's name here"
-                          type="text"
-                          value={user.name}
-                          name="name"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.email ? "" : "*"}{" "}
-                        </span>
-                        <label className="form-control-label">Email</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's email here"
-                          type="email"
-                          value={user.email}
-                          name="email"
-                          onChange={handleInput}
+                          className="form-control-file form"
+                          id="image"
+                          name="image"
+                          type="file"
+                          onChange={handleFileChange}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
+
                   <Row>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-password"
-                        >
-                          Password
-                        </label>
-                        <Input
-                          className="form-control-alternative"
-                          id="input-password"
-                          placeholder="Password"
-                          type="password"
-                          value={user.password}
-                          name="password"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <span style={{ color: "red" }}>
-                          {user.number ? "" : "*"}{" "}
-                        </span>
                         <label className="form-control-label">
-                          Contact no.
-                        </label>
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {consulting.text ? "" : "*"}{" "}
+                          </span>
+                          Text
+                        </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's contact here"
-                          type="phone"
-                          value={user.number}
-                          name="number"
-                          onChange={handleInput}
-                          maxLength="11"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">Address</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's address here"
+                          placeholder="Enter consulting 's text here"
                           type="text"
-                          value={user.address}
-                          name="address"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">City</label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter user's city here"
-                          type="text"
-                          value={user.city}
-                          name="city"
+                          value={consulting.text}
+                          name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
-                        <label className="form-control-label">Country</label>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {consulting.textbottom ? "" : "*"}{" "}
+                          </span>
+                          Text Bottom
+                        </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter user's country here"
+                          placeholder="Enter consulting 's textbottom here"
                           type="text"
-                          value={user.country}
-                          name="country"
+                          value={consulting.textbottom}
+                          name="textbottom"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row className="pl-lg-4">
+                    <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id={`customCheck1${consulting.contactbutton}`}
+                        className="custom-control-input"
+                        type="checkbox"
+                        checked={consulting.contactbutton}
+                        onChange={handleOnChange}
+                      />
+                      <label
+                        class="custom-control-label"
+                        for={`customCheck1${consulting.contactbutton}`}
+                      >
+                        Contact Button
+                      </label>
+                    </div>
                   </Row>
                 </div>
               </Form>
@@ -209,4 +162,4 @@ const EditAdvertising = ({
   );
 };
 
-export default EditAdvertising;
+export default EditConsulting;

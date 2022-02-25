@@ -15,51 +15,39 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 // core components
 
 const { Option } = Select;
 
-const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
-  let [advertising, setAdvertising] = useState({
+const AddProducts = ({ openModal, handleModal, getProducts }) => {
+  let [product, setProduct] = useState({
     title: "",
-    text: "",
+    description: "",
     image: "",
-    textbottom: "",
-    contactbutton: true,
   });
 
   const handleInput = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.value });
+    setProduct({ ...product, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.files[0] });
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    api("post", "/image", formData).then((res) => {
+      toast.success("Image uploaded successfully");
+      setProduct({ ...product, [e.target.name]: res.url });
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (advertising.name == "") {
-    //   return toast.error("Please enter user's name");
-    // }
+    if (!(product.title && product.description && product.image)) {
+      return toast.error("All fields are required");
+    }
 
-    // if (user.email == "") {
-    //   return toast.error("Please enter email");
-    // }
-    // if (!(user.email.includes(".") && user.email.includes("@"))) {
-    //   return toast.error("Please enter a valid email");
-    // }
-    // if (user.password == "") {
-    //   return toast.error("Password is required");
-    // }
-    // if (user.password.length < 8) {
-    //   return toast.error("Passwords should be of atleast 8 letters");
-    // }
-    // if (user.number == "") {
-    //   return toast.error("Contact no. is required");
-    // }
-
-    api("post", "/advertising", advertising).then((res) => {
-      toast.success("Advertising added successfully");
-      getAdvertising();
+    api("post", "/product", product).then((res) => {
+      toast.success("product added successfully");
+      getProducts();
       handleModal();
     });
   };
@@ -68,7 +56,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add a user
+          Add product
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -76,21 +64,18 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="12">
+                    <Col lg="4">
                       <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="input-image"
-                        >
+                        <label className="form-control-label" htmlFor="image">
                           <span style={{ color: "red" }}>
-                            {advertising.image ? "" : "*"}
+                            {product.image ? "" : "*"}
                           </span>{" "}
-                          Add Image <i className="ni ni-album-2" />
+                          Image <i className="ni ni-album-2" />
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="input-image"
-                          name="profile_pic"
+                          id="image"
+                          name="image"
                           type="file"
                           onChange={handleFileChange}
                         />
@@ -104,16 +89,16 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.title ? "" : "*"}{" "}
+                            {product.title ? "" : "*"}{" "}
                           </span>
                           Title
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's title here"
+                          placeholder="Enter product's title here"
                           type="text"
-                          value={advertising.title}
+                          value={product.title}
                           name="title"
                           onChange={handleInput}
                         />
@@ -124,60 +109,18 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.text ? "" : "*"}{" "}
+                            {product.text ? "" : "*"}{" "}
                           </span>
-                          Text
+                          Description
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's text here"
+                          placeholder="Enter product's description here"
                           type="text"
-                          value={advertising.text}
-                          name="text"
+                          value={product.description}
+                          name="description"
                           onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {advertising.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Text Bottom
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter advertising's textbottom here"
-                          type="text"
-                          value={advertising.textbottom}
-                          name="textbottom"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          <span style={{ color: "red" }}>
-                            {advertising.number ? "" : "*"}{" "}
-                          </span>{" "}
-                          Contact no.
-                        </label>
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter advertising's contact here"
-                          type="phone"
-                          value={advertising.number}
-                          name="number"
-                          onChange={handleInput}
-                          maxLength="11"
                         />
                       </FormGroup>
                     </Col>
@@ -199,4 +142,4 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
   );
 };
 
-export default AddAdvertising;
+export default AddProducts;

@@ -36,33 +36,30 @@ import {
 } from "reactstrap";
 
 // core components
-import AddAdvertising from "./AddReviews";
-import EditAdvertising from "./EditReviews";
+import AddReview from "./AddReview";
+import EditReview from "./EditReview";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Advertising = ({ status }) => {
+const Reviews = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const history = useHistory();
   const [data, setData] = useState([]);
-  const [advertising, setadvertising] = useState({
-    _id: "",
-    title: "",
-    text: "",
+  const [review, setReview] = useState({
+    name: "",
     image: "",
-    textbottom: "",
-    contactbutton: "",
+    rating: "",
+    message: true,
   });
 
   useEffect(() => {
-    getAdvertising();
+    getReviews();
   }, []);
 
-  const getAdvertising = async () => {
-    const data = await api("get", "/advertising");
-    setData([{ advertise: data.advertise }]);
-    console.log("====", data.advertise);
+  const getReviews = async () => {
+    const data = await api("get", "/reviews");
+    setData(data.reviews);
+    console.log("====", data);
   };
 
   const handleModal = () => {
@@ -72,13 +69,12 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setadvertising({
+      setReview({
         _id: item._id,
-        title: item.title,
-        text: item.text,
+        name: item.name,
         image: item.image,
-        textbottom: item.textbottom,
-        contactbutton: item.contactbutton,
+        message: item.message,
+        rating: item.rating,
       });
     }
 
@@ -86,10 +82,10 @@ const Advertising = ({ status }) => {
     return openModal;
   };
 
-  const handleDelete = (id) => {
-    api("delete", `/users/${id}`).then(() => {
-      toast.success("Advertising deleted successfully");
-      getAdvertising();
+  const handleDelete = () => {
+    api("delete", "/reviews").then(() => {
+      toast.success("review deleted successfully");
+      getReviews();
     });
   };
 
@@ -104,7 +100,7 @@ const Advertising = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Advertising</h3>
+                  <h3 className="mb-0">Review</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -112,47 +108,35 @@ const Advertising = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Advertising
+                    Add Review
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
-
+                    <th scope="col">Name</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Message</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
+                  {data.map((item) => {
                     return (
                       <tr>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm" title={item.title}>
-                                {item.title?.length > 30
-                                  ? item.title?.substring(0, 30) + "..."
-                                  : item.title}
-                              </span>
-                            </Media>
-                          </Media>
-                        </th>
-                        <td title={item.text}>
-                          {item.text?.length > 30
-                            ? item.text?.substring(0, 30) + "..."
-                            : item.text}
+                        <td title={item.name}>
+                          {item.name?.length > 30
+                            ? item.name?.substring(0, 30) + "..."
+                            : item.name}
+                        </td>
+                        <td title={item.rating}>{item.rating}</td>
+                        <td title={item.message}>
+                          {item.message?.length > 30
+                            ? item.message?.substring(0, 30) + "..."
+                            : item.message}
                         </td>
 
-                        <td title={item.contactbutton}>
-                          {item.contactbutton?.length > 30
-                            ? item.contactbutton?.substring(0, 30) + "..."
-                            : item.contactbutton}
-                        </td>
                         <td className="text-right">
                           <UncontrolledDropdown>
                             <DropdownToggle
@@ -200,19 +184,19 @@ const Advertising = ({ status }) => {
           </div>
         </Row>
         {openModal && (
-          <AddAdvertising
+          <AddReview
             openModal={openModal}
             handleModal={handleModal}
-            getAdvertising={getAdvertising}
+            getReviews={getReviews}
           />
         )}
         {editModal && (
-          <EditAdvertising
+          <EditReview
             openModal={editModal}
             handleModal={handleEditModal}
-            advertising={advertising}
-            setadvertising={setadvertising}
-            getAdvertising={getAdvertising}
+            review={review}
+            setReview={setReview}
+            getReviews={getReviews}
           />
         )}
       </Container>
@@ -220,4 +204,4 @@ const Advertising = ({ status }) => {
   );
 };
 
-export default Advertising;
+export default Reviews;
