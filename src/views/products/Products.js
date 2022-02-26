@@ -71,7 +71,9 @@ const Products = ({ status }) => {
       setProduct({
         _id: item._id,
         title: item.title,
+        title_font: item.title_font,
         description: item.description,
+        description_font: item.description_font,
         image: item.image,
       });
     }

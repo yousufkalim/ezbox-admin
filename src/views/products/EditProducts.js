@@ -14,6 +14,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -88,7 +89,7 @@ const EditProducts = ({
                   </Row>
 
                   <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -108,6 +109,19 @@ const EditProducts = ({
                         />
                       </FormGroup>
                     </Col>
+                    <FontPicker
+                      data={product}
+                      setData={setProduct}
+                      fieldName="title_font"
+                    />
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={product}
+                      setData={setProduct}
+                      fieldName="description_font"
+                      width="12"
+                    />
                   </Row>
                   <Row>
                     <Col lg="12" style={{ margin: "auto" }}>

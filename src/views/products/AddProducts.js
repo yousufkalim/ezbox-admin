@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -84,7 +85,7 @@ const AddProducts = ({ openModal, handleModal, getProducts }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -104,6 +105,19 @@ const AddProducts = ({ openModal, handleModal, getProducts }) => {
                         />
                       </FormGroup>
                     </Col>
+                    <FontPicker
+                      data={product}
+                      setData={setProduct}
+                      fieldName="title_font"
+                    />
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={product}
+                      setData={setProduct}
+                      fieldName="description_font"
+                      width="12"
+                    />
                   </Row>
                   <Row>
                     <Col lg="12" style={{ margin: "auto" }}>
