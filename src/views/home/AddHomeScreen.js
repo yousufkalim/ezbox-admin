@@ -15,7 +15,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
-import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -84,7 +84,7 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -104,8 +104,14 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
                         />
                       </FormGroup>
                     </Col>
-
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <FontPicker
+                      data={home}
+                      setData={setHome}
+                      fieldName="text_font"
+                    />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}

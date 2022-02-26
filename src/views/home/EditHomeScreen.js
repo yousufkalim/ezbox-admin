@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
+import FontPicker from "components/FontPicker";
 import {
   Modal,
   ModalBody,
@@ -82,7 +83,7 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -102,8 +103,14 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                         />
                       </FormGroup>
                     </Col>
-
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <FontPicker
+                      data={home}
+                      setData={setHome}
+                      fieldName="text_font"
+                    />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}

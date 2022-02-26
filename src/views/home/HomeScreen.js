@@ -71,6 +71,7 @@ const HomeScreen = ({ status }) => {
     if (item) {
       setHome({
         text: item.text,
+        text_font: item.text_font,
         image: item.image,
         yt_link: item.yt_link,
       });
