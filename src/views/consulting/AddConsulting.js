@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -88,6 +89,14 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                     </Col>
                   </Row>
                   <Row>
+                    <FontPicker
+                      data={consulting}
+                      setData={setConsulting}
+                      fieldName="text_font"
+                      width="12"
+                    />
+                  </Row>
+                  <Row>
                     <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -110,7 +119,7 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -130,7 +139,14 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <FontPicker
+                      data={consulting}
+                      setData={setConsulting}
+                      fieldName="textbottom_font"
+                    />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <div class="custom-control custom-checkbox">
                         <input
                           type="checkbox"

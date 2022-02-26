@@ -73,8 +73,10 @@ const Consulting = ({ status }) => {
       setConsulting({
         _id: item._id,
         text: item.text,
+        text_font: item.text_font,
         image: item.image,
         textbottom: item.textbottom,
+        textbottom_font: item.textbottom_font,
         contactbutton: item.contactbutton,
       });
     }
