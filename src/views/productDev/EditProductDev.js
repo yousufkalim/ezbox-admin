@@ -29,6 +29,8 @@ const EditProductDev = ({
     setProductDev({ ...productDev, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setProductDev({ ...productDev, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -39,16 +41,14 @@ const EditProductDev = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !(
-        productDev.text &&
-        productDev.leftImg &&
-        productDev.centerImg &&
-        productDev.rightImg
-      )
-    ) {
+    if (!productDev.text) {
       return toast.error("All fields are required");
     }
+
+    if (!(productDev.leftImg && productDev.centerImg && productDev.rightImg)) {
+      return toast.error("Wait before the image to upload");
+    }
+
     api("post", "/productDev", productDev).then((res) => {
       toast.success("Product Development edited successfully");
       getProductDev();

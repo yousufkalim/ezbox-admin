@@ -29,6 +29,8 @@ const EditConsulting = ({
     setConsulting({ ...consulting, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setConsulting({ ...consulting, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -43,9 +45,14 @@ const EditConsulting = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(consulting.text && consulting.image && consulting.textbottom)) {
+    if (!(consulting.text && consulting.textbottom)) {
       return toast.error("All fields are required");
     }
+
+    if (!consulting.image) {
+      return toast.error("Wait before the image to upload");
+    }
+
     api("post", "/consulting ", consulting).then((res) => {
       toast.success("consulting  edited successfully");
       getConsulting();

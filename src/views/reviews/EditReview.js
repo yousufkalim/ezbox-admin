@@ -29,6 +29,8 @@ const EditReview = ({
     setReview({ ...review, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setReview({ ...review, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -43,13 +45,18 @@ const EditReview = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(review.name && review.image && review.message)) {
+    if (!(review.name && review.message)) {
       return toast.error("All fields are required");
+    }
+
+    if (!review.image) {
+      return toast.error("Wait before the image to upload");
     }
 
     if (!review.rating) {
       return toast.error("Rating should be in number");
     }
+
     api("put", `/reviews/${review._id}`, review).then((res) => {
       toast.success("review  edited successfully");
       getReviews();

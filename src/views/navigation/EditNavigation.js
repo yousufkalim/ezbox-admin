@@ -29,6 +29,8 @@ const EditNavigation = ({
     setNavigation({ ...navigation, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setNavigation({ ...navigation, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -36,6 +38,7 @@ const EditNavigation = ({
       setNavigation({ ...navigation, [e.target.name]: res.url });
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -46,7 +49,7 @@ const EditNavigation = ({
       return toast.error("Forum is  required");
     }
     if (!navigation.logo) {
-      return toast.error("Logo is  required");
+      return toast.error("Wait before the image to upload");
     }
 
     api("post", "/navigation ", navigation).then((res) => {

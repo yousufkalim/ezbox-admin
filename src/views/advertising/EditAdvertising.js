@@ -29,6 +29,8 @@ const EditAdvertising = ({
     setAdvertising({ ...advertising, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setAdvertising({ ...advertising, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -43,18 +45,16 @@ const EditAdvertising = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !(
-        advertising.title &&
-        advertising.text &&
-        advertising.leftImg &&
-        advertising.rightImg &&
-        advertising.centerImg &&
-        advertising.textbottom
-      )
-    ) {
+    if (!(advertising.title && advertising.text && advertising.textbottom)) {
       return toast.error("All fields are required");
     }
+
+    if (
+      !(advertising.leftImg && advertising.rightImg && advertising.centerImg)
+    ) {
+      return toast.error("Wait before the image to upload");
+    }
+
     api("post", "/advertising", advertising).then((res) => {
       toast.success("Advertising edited successfully");
       getAdvertising();

@@ -23,6 +23,8 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
     setHome({ ...home, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setHome({ ...home, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -33,8 +35,12 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(home.text && home.image && home.yt_link)) {
+    if (!(home.text && home.yt_link)) {
       return toast.error("All fields are required");
+    }
+
+    if (!home.image) {
+      return toast.error("Wait before the image to upload");
     }
 
     api("post", "/homeScreen", home).then((res) => {
