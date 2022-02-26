@@ -97,47 +97,53 @@ const Contact = ({ status }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item) => {
-                    return (
-                      <tr>
-                        <td title={item.name}>
-                          {item.name?.length > 30
-                            ? item.name?.substring(0, 30) + "..."
-                            : item.name}
-                        </td>
+                  {data.length > 0 ? (
+                    data?.map((item) => {
+                      return (
+                        <tr>
+                          <td title={item.name}>
+                            {item.name?.length > 30
+                              ? item.name?.substring(0, 30) + "..."
+                              : item.name}
+                          </td>
 
-                        <td title={item.number}>
-                          {item.number?.length > 30
-                            ? item.number?.substring(0, 30) + "..."
-                            : item.number}
-                        </td>
-                        <td title={item.email}>
-                          {item.email?.length > 30
-                            ? item.email?.substring(0, 30) + "..."
-                            : item.email}
-                        </td>
+                          <td title={item.number}>
+                            {item.number?.length > 30
+                              ? item.number?.substring(0, 30) + "..."
+                              : item.number}
+                          </td>
+                          <td title={item.email}>
+                            {item.email?.length > 30
+                              ? item.email?.substring(0, 30) + "..."
+                              : item.email}
+                          </td>
 
-                        <td title={item.message}>
-                          {item.message?.length > 30
-                            ? item.message?.substring(0, 30) + "..."
-                            : item.message}
-                        </td>
-                        <td className="text-right">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-dark"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={() => handleDelete(item._id)}
-                            >
-                              <i className="fas fa-trash text-red" />
-                            </DropdownToggle>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          <td title={item.message}>
+                            {item.message?.length > 30
+                              ? item.message?.substring(0, 30) + "..."
+                              : item.message}
+                          </td>
+                          <td className="text-right">
+                            <UncontrolledDropdown>
+                              <DropdownToggle
+                                className="btn-icon-only text-dark"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={() => handleDelete(item._id)}
+                              >
+                                <i className="fas fa-trash text-red" />
+                              </DropdownToggle>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td>N/A</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>
