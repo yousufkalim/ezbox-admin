@@ -81,7 +81,7 @@ const EditProducts = ({
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -101,7 +101,9 @@ const EditProducts = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -114,7 +116,7 @@ const EditProducts = ({
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter product's description here"
-                          type="text"
+                          type="textarea"
                           value={product.description}
                           name="description"
                           onChange={handleInput}

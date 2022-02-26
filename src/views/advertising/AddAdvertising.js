@@ -141,7 +141,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -161,7 +161,9 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -174,7 +176,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter advertising's text here"
-                          type="text"
+                          type="textarea"
                           value={advertising.text}
                           name="text"
                           onChange={handleInput}
@@ -211,7 +213,6 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                           id={`customCheck1${advertising.contactbutton}`}
                           checked={advertising.contactbutton}
                           className="custom-control-input"
-                          type="checkbox"
                           onChange={handleOnChange}
                         />
                         <label

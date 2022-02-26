@@ -83,9 +83,8 @@ const EditConsulting = ({
                       </FormGroup>
                     </Col>
                   </Row>
-
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -98,13 +97,15 @@ const EditConsulting = ({
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter consulting 's text here"
-                          type="text"
+                          type="textarea"
                           value={consulting.text}
                           name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -125,25 +126,24 @@ const EditConsulting = ({
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row className="pl-lg-4">
-                    <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id={`customCheck1${consulting.contactbutton}`}
-                        className="custom-control-input"
-                        type="checkbox"
-                        checked={consulting.contactbutton}
-                        onChange={handleOnChange}
-                      />
-                      <label
-                        class="custom-control-label"
-                        for={`customCheck1${consulting.contactbutton}`}
-                      >
-                        Contact Button
-                      </label>
-                    </div>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${consulting.contactbutton}`}
+                          className="custom-control-input"
+                          checked={consulting.contactbutton}
+                          onChange={handleOnChange}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${consulting.contactbutton}`}
+                        >
+                          Contact Button
+                        </label>
+                      </div>
+                    </Col>
                   </Row>
                 </div>
               </Form>

@@ -72,7 +72,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
               <Form>
                 <div className="px-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="leftImg">
                           <span style={{ color: "red" }}>
@@ -89,7 +89,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -109,9 +109,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                         />
                       </FormGroup>
                     </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label
                           className="form-control-label"
@@ -131,7 +129,9 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                  </Row>
+                  <Row>
+                    <Col lg="12">
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -144,7 +144,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter productDev's text here"
-                          type="text"
+                          type="textarea"
                           value={productDev.text}
                           name="text"
                           onChange={handleInput}

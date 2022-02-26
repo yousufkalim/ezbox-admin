@@ -134,7 +134,7 @@ const EditAdvertising = ({
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -154,7 +154,9 @@ const EditAdvertising = ({
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -167,7 +169,7 @@ const EditAdvertising = ({
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter advertising's text here"
-                          type="text"
+                          type="textarea"
                           value={advertising.text}
                           name="text"
                           onChange={handleInput}

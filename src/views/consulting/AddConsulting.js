@@ -87,9 +87,8 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                       </FormGroup>
                     </Col>
                   </Row>
-
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -102,13 +101,15 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                           className="form-control-alternative text-default"
                           required={true}
                           placeholder="Enter consulting's text here"
-                          type="text"
+                          type="textarea"
                           value={consulting.text}
                           name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -128,28 +129,27 @@ const AddConsulting = ({ openModal, handleModal, getConsulting }) => {
                           onChange={handleInput}
                         />
                       </FormGroup>
-                    </Col>{" "}
+                    </Col>
+                    <Col lg="6" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${consulting.contactbutton}`}
+                          checked={consulting.contactbutton}
+                          className="custom-control-input"
+                          onChange={handleOnChange}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${consulting.contactbutton}`}
+                        >
+                          Contact Button
+                        </label>
+                      </div>
+                    </Col>
                   </Row>
                 </div>
-                <Row className="pl-lg-5">
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id={`customCheck1${consulting.contactbutton}`}
-                      checked={consulting.contactbutton}
-                      className="custom-control-input"
-                      type="checkbox"
-                      onChange={handleOnChange}
-                    />
-                    <label
-                      class="custom-control-label"
-                      for={`customCheck1${consulting.contactbutton}`}
-                    >
-                      Contact Button
-                    </label>
-                  </div>
-                </Row>
               </Form>
             </Col>
           </Row>
