@@ -60,8 +60,7 @@ const Consulting = ({ status }) => {
 
   const getConsulting = async () => {
     const data = await api("get", "/consulting");
-    setData(data.consult);
-    console.log("====", data.consult);
+    setData(data.consulting);
   };
 
   const handleModal = () => {
