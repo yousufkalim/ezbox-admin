@@ -44,7 +44,7 @@ import { toast } from "react-toastify";
 const Products = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   let [product, setProduct] = useState({
     title: "",
     description: "",
@@ -121,71 +121,78 @@ const Products = ({ status }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(data).length > 0 ? (
-                    <tr>
-                      <td title={data.image}>
-                        <Media className="align-items-center">
-                          <a
-                            className="avatar rounded-circle mr-3"
-                            href="#pablo"
-                          >
-                            {data.image ? (
-                              <img
-                                className="rounded-circle"
-                                style={{ width: "100%", height: "100%" }}
-                                alt="logo"
-                                src={
-                                  process.env.REACT_APP_SERVER_MEDIA_URL +
-                                  data.image
-                                }
-                              />
-                            ) : (
-                              <i className="ni ni-circle-08" />
-                            )}
-                          </a>
-                        </Media>
-                      </td>
-                      <td title={data.title}>
-                        {data.title?.length > 30
-                          ? data.title?.substring(0, 30) + "..."
-                          : data.title}
-                      </td>
-                      <td title={data.description}>
-                        {data.description?.length > 30
-                          ? data.description?.substring(0, 30) + "..."
-                          : data.description}
-                      </td>
+                  {data.length > 0 ? (
+                    data.map((item) => {
+                      return (
+                        <tr>
+                          <td title={item.image}>
+                            <Media className="align-items-center">
+                              <a
+                                className="avatar rounded-circle mr-3"
+                                href="#pablo"
+                              >
+                                {item.image ? (
+                                  <img
+                                    className="rounded-circle"
+                                    style={{ width: "100%", height: "100%" }}
+                                    alt="logo"
+                                    src={
+                                      process.env.REACT_APP_SERVER_MEDIA_URL +
+                                      item.image
+                                    }
+                                  />
+                                ) : (
+                                  <i className="ni ni-circle-08" />
+                                )}
+                              </a>
+                            </Media>
+                          </td>
+                          <td title={item.title}>
+                            {item.title?.length > 30
+                              ? item.title?.substring(0, 30) + "..."
+                              : item.title}
+                          </td>
+                          <td title={item.description}>
+                            {item.description?.length > 30
+                              ? item.description?.substring(0, 30) + "..."
+                              : item.description}
+                          </td>
 
-                      <td className="text-right">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
-                          <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={() => handleEditModal(data)}
-                            >
-                              Edit
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              className="text-danger"
-                              onClick={() => handleDelete(data._id)}
-                            >
-                              Delete
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </td>
-                    </tr>
+                          <td className="text-right">
+                            <UncontrolledDropdown>
+                              <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                <i className="fas fa-ellipsis-v" />
+                              </DropdownToggle>
+                              <DropdownMenu
+                                className="dropdown-menu-arrow"
+                                right
+                              >
+                                <DropdownItem
+                                  href="#pablo"
+                                  onClick={() => handleEditModal(item)}
+                                >
+                                  Edit
+                                </DropdownItem>
+                                <DropdownItem
+                                  href="#pablo"
+                                  className="text-danger"
+                                  onClick={() => handleDelete(item._id)}
+                                >
+                                  Delete
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td>N/A</td>

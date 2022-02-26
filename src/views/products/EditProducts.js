@@ -42,7 +42,7 @@ const EditProducts = ({
     if (!(product.title && product.description && product.image)) {
       return toast.error("All fields are required");
     }
-    api("post", "/product", product).then((res) => {
+    api("put", `/product/${product._id}`, product).then((res) => {
       toast.success("Product edited successfully");
       getProducts();
       handleModal();
