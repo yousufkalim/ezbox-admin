@@ -15,7 +15,7 @@ import {
   Col,
   Label,
 } from "reactstrap";
-import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -93,7 +93,7 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -113,7 +113,12 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <FontPicker
+                      data={review}
+                      setData={setReview}
+                      fieldName="name_font"
+                    />
+                    <Col lg="4" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -156,6 +161,14 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={review}
+                      setData={setReview}
+                      fieldName="message_font"
+                      width="12"
+                    />
                   </Row>
                 </div>
               </Form>

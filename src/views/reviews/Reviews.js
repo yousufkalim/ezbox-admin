@@ -72,8 +72,10 @@ const Reviews = ({ status }) => {
       setReview({
         _id: item._id,
         name: item.name,
+        name_font: item.name_font,
         image: item.image,
         message: item.message,
+        message_font: item.message_font,
         rating: item.rating,
       });
     }
