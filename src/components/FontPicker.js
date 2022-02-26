@@ -1,6 +1,5 @@
 import { Col, FormGroup } from "reactstrap";
 import ReactFontPicker from "font-picker-react";
-import "assets/css/app.css";
 
 function FontPicker({ data, setData, fieldName, width }) {
   return (
