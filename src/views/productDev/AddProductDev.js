@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -129,6 +130,14 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={productDev}
+                      setData={setProductDev}
+                      fieldName="text_font"
+                      width="12"
+                    />
                   </Row>
                   <Row>
                     <Col lg="12">

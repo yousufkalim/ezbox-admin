@@ -73,6 +73,7 @@ const ProductDev = ({ status }) => {
     if (item) {
       setProductDev({
         text: item.text,
+        text_font: item.text_font,
         leftImg: item.leftImg,
         centerImg: item.centerImg,
         rightImg: item.rightImg,

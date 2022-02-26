@@ -14,6 +14,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -125,6 +126,14 @@ const EditProductDev = ({
                         />
                       </FormGroup>
                     </Col>
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={productDev}
+                      setData={setProductDev}
+                      fieldName="text_font"
+                      width="12"
+                    />
                   </Row>
                   <Row>
                     <Col lg="12">
