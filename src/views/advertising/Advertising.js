@@ -19,7 +19,6 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "api";
-import { Store, UpdateStore } from "StoreContext";
 import {
   Badge,
   Card,
@@ -77,11 +76,14 @@ const Advertising = ({ status }) => {
       setAdvertising({
         _id: item._id,
         title: item.title,
+        title_font: item.title_font,
         text: item.text,
+        text_font: item.text_font,
         leftImg: item.leftImg,
         centerImg: item.centerImg,
         rightImg: item.rightImg,
         textbottom: item.textbottom,
+        textbottom_font: item.textbottom_font,
         contactbutton: item.contactbutton,
       });
     }

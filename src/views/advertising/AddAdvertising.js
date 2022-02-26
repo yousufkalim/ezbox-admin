@@ -16,6 +16,7 @@ import {
   Label,
 } from "reactstrap";
 import { tuple } from "antd/lib/_util/type";
+import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
@@ -141,7 +142,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                   </Row>
 
                   <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -161,6 +162,19 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         />
                       </FormGroup>
                     </Col>
+                    <FontPicker
+                      data={advertising}
+                      setData={setAdvertising}
+                      fieldName="title_font"
+                    />
+                  </Row>
+                  <Row>
+                    <FontPicker
+                      data={advertising}
+                      setData={setAdvertising}
+                      fieldName="text_font"
+                      width="12"
+                    />
                   </Row>
                   <Row>
                     <Col lg="12" style={{ margin: "auto" }}>
@@ -185,7 +199,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
@@ -205,7 +219,14 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6" style={{ margin: "auto" }}>
+                    <FontPicker
+                      data={advertising}
+                      setData={setAdvertising}
+                      fieldName="textbottom_font"
+                    />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <div class="custom-control custom-checkbox">
                         <input
                           type="checkbox"
