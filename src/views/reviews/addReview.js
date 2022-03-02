@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -13,50 +13,50 @@ import {
   Input,
   Row,
   Col,
+  Label,
 } from "reactstrap";
 import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
 
-const EditConsulting = ({
-  openModal,
-  handleModal,
-  consulting,
-  setConsulting,
-  getConsulting,
-}) => {
+const AddReview = ({ openModal, handleModal, getReviews }) => {
+  let [review, setReview] = useState({
+    name: "",
+    image: "",
+    rating: "",
+    message: "",
+  });
+
+  const handleOnChange = () => {
+    setReview((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+  };
+
   const handleInput = (e) => {
-    setConsulting({ ...consulting, [e.target.name]: e.target.value });
+    setReview({ ...review, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setConsulting({ ...consulting, [e.target.name]: "" });
-
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
       toast.success("Image uploaded successfully");
-      setConsulting({ ...consulting, [e.target.name]: res.url });
+      setReview({ ...review, [e.target.name]: res.url });
     });
-  };
-
-  const handleOnChange = () => {
-    setConsulting((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(consulting.text && consulting.textbottom)) {
+    if (!(review.name && review.image && review.message)) {
       return toast.error("All fields are required");
     }
 
-    if (!consulting.image) {
-      return toast.error("Wait before the image to upload");
+    if (!review.rating) {
+      return toast.error("Rating should be in number");
     }
 
-    api("post", "/consulting ", consulting).then((res) => {
-      toast.success("consulting  edited successfully");
-      getConsulting();
+    api("post", "/reviews", review).then((res) => {
+      toast.success("review added successfully");
+      getReviews();
       handleModal();
     });
   };
@@ -65,7 +65,7 @@ const EditConsulting = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit consulting
+          Add review
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -77,7 +77,7 @@ const EditConsulting = ({
                       <FormGroup>
                         <label className="form-control-label" htmlFor="image">
                           <span style={{ color: "red" }}>
-                            {consulting.image ? "" : "*"}
+                            {review.image ? "" : "*"}
                           </span>{" "}
                           Image <i className="ni ni-album-2" />
                         </label>
@@ -91,82 +91,84 @@ const EditConsulting = ({
                       </FormGroup>
                     </Col>
                   </Row>
+
+                  <Row>
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {review.name ? "" : "*"}{" "}
+                          </span>
+                          Name
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative name-default"
+                          required={true}
+                          placeholder="Enter review's name here"
+                          type="text"
+                          value={review.name}
+                          name="name"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <FontPicker
+                      data={review}
+                      setData={setReview}
+                      fieldName="name_font"
+                    />
+                    <Col lg="4" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {review.rating ? "" : "*"}{" "}
+                          </span>
+                          Rating
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter review's rating here"
+                          type="number"
+                          value={review.rating}
+                          name="rating"
+                          onChange={handleInput}
+                          max={5}
+                        />
+                      </FormGroup>
+                    </Col>{" "}
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {review.message ? "" : "*"}{" "}
+                          </span>
+                          Message
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative name-default"
+                          required={true}
+                          placeholder="Enter review's message here"
+                          type="textarea"
+                          value={review.message}
+                          name="message"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
                   <Row>
                     <FontPicker
-                      data={consulting}
-                      setData={setConsulting}
-                      fieldName="text_font"
+                      data={review}
+                      setData={setReview}
+                      fieldName="message_font"
                       width="12"
                     />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {consulting.text ? "" : "*"}{" "}
-                          </span>
-                          Text
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter consulting 's text here"
-                          type="textarea"
-                          value={consulting.text}
-                          name="text"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="8" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {consulting.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Text Bottom
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter consulting 's textbottom here"
-                          type="text"
-                          value={consulting.textbottom}
-                          name="textbottom"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <FontPicker
-                      data={consulting}
-                      setData={setConsulting}
-                      fieldName="textbottom_font"
-                    />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id={`customCheck1${consulting.contactbutton}`}
-                          className="custom-control-input"
-                          checked={consulting.contactbutton}
-                          onChange={handleOnChange}
-                        />
-                        <label
-                          class="custom-control-label"
-                          for={`customCheck1${consulting.contactbutton}`}
-                        >
-                          Contact Button
-                        </label>
-                      </div>
-                    </Col>
                   </Row>
                 </div>
               </Form>
@@ -175,7 +177,7 @@ const EditConsulting = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Update
+            Save
           </Button>
 
           <Button onClick={handleModal}>Cancel</Button>
@@ -185,4 +187,4 @@ const EditConsulting = ({
   );
 };
 
-export default EditConsulting;
+export default AddReview;
