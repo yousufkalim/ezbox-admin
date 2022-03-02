@@ -1,184 +1,134 @@
-import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label,
-} from "reactstrap";
-import { tuple } from "antd/lib/_util/type";
+import { ModalBody, FormGroup, Form, Input, Row, Col } from "reactstrap";
 import FontPicker from "components/FontPicker";
 // core components
 
-const { Option } = Select;
-
-const AddLayout3 = ({ openModal, handleModal, getConsulting }) => {
-  let [consulting, setConsulting] = useState({
-    text: "",
-    image: "",
-    textbottom: "",
-    contactbutton: true,
-  });
-
+const AddLayout3 = ({ layout, setLayout }) => {
   const handleOnChange = () => {
-    setConsulting((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+    setLayout(prev => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
-  const handleInput = (e) => {
-    setConsulting({ ...consulting, [e.target.name]: e.target.value });
+  const handleInput = e => {
+    setLayout({ ...layout, [e.target.name]: e.target.value });
   };
-  const handleFileChange = (e) => {
+
+  const handleFileChange = e => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
-    api("post", "/image", formData).then((res) => {
+    api("post", "/image", formData).then(res => {
       toast.success("Image uploaded successfully");
-      setConsulting({ ...consulting, [e.target.name]: res.url });
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!(consulting.text && consulting.image && consulting.textbottom)) {
-      return toast.error("All fields are required");
-    }
-
-    api("post", "/consulting", consulting).then((res) => {
-      toast.success("consulting added successfully");
-      getConsulting();
-      handleModal();
+      setLayout({ ...layout, [e.target.name]: res.url });
     });
   };
 
   return (
-    <>
-      <Modal isOpen={openModal} size="xl" centered>
-        <ModalHeader charCode="X" toggle={handleModal}>
-          Add Consulting
-        </ModalHeader>
-        <ModalBody>
-          <Row>
-            <Col>
-              <Form>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label className="form-control-label" htmlFor="image">
-                          <span style={{ color: "red" }}>
-                            {consulting.image ? "" : "*"}
-                          </span>{" "}
-                          Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="image"
-                          name="image"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <FontPicker
-                      data={consulting}
-                      setData={setConsulting}
-                      fieldName="text_font"
-                      width="12"
+    <ModalBody>
+      <Row>
+        <Col>
+          <Form>
+            <div className="pl-lg-4">
+              <Row>
+                <Col lg="4">
+                  <FormGroup>
+                    <label className="form-control-label" htmlFor="image">
+                      <span style={{ color: "red" }}>
+                        {layout.image ? "" : "*"}
+                      </span>{" "}
+                      Image <i className="ni ni-album-2" />
+                    </label>
+                    <Input
+                      className="form-control-file form"
+                      id="image"
+                      name="image"
+                      type="file"
+                      onChange={handleFileChange}
                     />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {consulting.text ? "" : "*"}{" "}
-                          </span>
-                          Text
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter consulting's text here"
-                          type="textarea"
-                          value={consulting.text}
-                          name="text"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="8" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {consulting.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Text Bottom
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter consulting's textbottom here"
-                          type="text"
-                          value={consulting.textbottom}
-                          name="textbottom"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <FontPicker
-                      data={consulting}
-                      setData={setConsulting}
-                      fieldName="textbottom_font"
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <FontPicker
+                  data={layout}
+                  setData={setLayout}
+                  fieldName="text_font"
+                  width="12"
+                />
+              </Row>
+              <Row>
+                <Col lg="12" style={{ margin: "auto" }}>
+                  <FormGroup>
+                    <label className="form-control-label">
+                      {" "}
+                      <span style={{ color: "red" }}>
+                        {layout.text ? "" : "*"}{" "}
+                      </span>
+                      Text
+                    </label>{" "}
+                    <Input
+                      className="form-control-alternative text-default"
+                      required={true}
+                      placeholder="Enter layout's text here"
+                      type="textarea"
+                      value={layout.text}
+                      name="text"
+                      onChange={handleInput}
                     />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id={`customCheck1${consulting.contactbutton}`}
-                          checked={consulting.contactbutton}
-                          className="custom-control-input"
-                          onChange={handleOnChange}
-                        />
-                        <label
-                          class="custom-control-label"
-                          for={`customCheck1${consulting.contactbutton}`}
-                        >
-                          Contact Button
-                        </label>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </Form>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Save
-          </Button>
-
-          <Button onClick={handleModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col lg="8" style={{ margin: "auto" }}>
+                  <FormGroup>
+                    <label className="form-control-label">
+                      {" "}
+                      <span style={{ color: "red" }}>
+                        {layout.textbottom ? "" : "*"}{" "}
+                      </span>
+                      Text Bottom
+                    </label>{" "}
+                    <Input
+                      className="form-control-alternative text-default"
+                      required={true}
+                      placeholder="Enter layout's textbottom here"
+                      type="text"
+                      value={layout.textbottom}
+                      name="textbottom"
+                      onChange={handleInput}
+                    />
+                  </FormGroup>
+                </Col>
+                <FontPicker
+                  data={layout}
+                  setData={setLayout}
+                  fieldName="textbottom_font"
+                />
+              </Row>
+              <Row>
+                <Col lg="12" style={{ margin: "auto" }}>
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id={`customCheck1${layout.contactbutton}`}
+                      checked={layout.contactbutton}
+                      className="custom-control-input"
+                      onChange={handleOnChange}
+                    />
+                    <label
+                      class="custom-control-label"
+                      for={`customCheck1${layout.contactbutton}`}
+                    >
+                      Contact Button
+                    </label>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </ModalBody>
   );
 };
 
