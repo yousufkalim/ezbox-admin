@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -13,33 +13,25 @@ import {
   Input,
   Row,
   Col,
-  Label,
 } from "reactstrap";
-import { tuple } from "antd/lib/_util/type";
 import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
 
-const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
-  let [advertising, setAdvertising] = useState({
-    title: "",
-    text: "",
-    leftImg: "",
-    centerImg: "",
-    rightImg: "",
-    textbottom: "",
-    contactbutton: true,
-  });
-
-  const handleOnChange = () => {
-    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
-  };
-
+const EditLayout1 = ({
+  openModal,
+  handleModal,
+  advertising,
+  setAdvertising,
+  getAdvertising,
+}) => {
   const handleInput = (e) => {
     setAdvertising({ ...advertising, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
+    setAdvertising({ ...advertising, [e.target.name]: "" });
+
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -48,23 +40,24 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
     });
   };
 
+  const handleOnChange = () => {
+    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !(
-        advertising.title &&
-        advertising.text &&
-        advertising.leftImg &&
-        advertising.rightImg &&
-        advertising.centerImg &&
-        advertising.textbottom
-      )
-    ) {
+    if (!(advertising.title && advertising.text && advertising.textbottom)) {
       return toast.error("All fields are required");
     }
 
+    if (
+      !(advertising.leftImg && advertising.rightImg && advertising.centerImg)
+    ) {
+      return toast.error("Wait before the image to upload");
+    }
+
     api("post", "/advertising", advertising).then((res) => {
-      toast.success("Advertising added successfully");
+      toast.success("Advertising edited successfully");
       getAdvertising();
       handleModal();
     });
@@ -74,7 +67,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Advertising
+          Edit Advertising
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -232,8 +225,8 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
                           type="checkbox"
                           class="custom-control-input"
                           id={`customCheck1${advertising.contactbutton}`}
-                          checked={advertising.contactbutton}
                           className="custom-control-input"
+                          checked={advertising.contactbutton}
                           onChange={handleOnChange}
                         />
                         <label
@@ -252,7 +245,7 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Save
+            Update
           </Button>
 
           <Button onClick={handleModal}>Cancel</Button>
@@ -262,4 +255,4 @@ const AddAdvertising = ({ openModal, handleModal, getAdvertising }) => {
   );
 };
 
-export default AddAdvertising;
+export default EditLayout1;

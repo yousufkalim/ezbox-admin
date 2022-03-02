@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
 import { Select } from "antd";
@@ -13,25 +13,26 @@ import {
   Input,
   Row,
   Col,
+  Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
 
-const EditProductDev = ({
-  openModal,
-  handleModal,
-  productDev,
-  setProductDev,
-  getProductDev,
-}) => {
+const AddLayout2 = ({ openModal, handleModal, getProductDev }) => {
+  let [productDev, setProductDev] = useState({
+    text: "",
+    leftImg: "",
+    centerImg: "",
+    rightImg: "",
+  });
+
   const handleInput = (e) => {
     setProductDev({ ...productDev, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setProductDev({ ...productDev, [e.target.name]: "" });
-
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
@@ -42,16 +43,19 @@ const EditProductDev = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!productDev.text) {
+    if (
+      !(
+        productDev.leftImg &&
+        productDev.centerImg &&
+        productDev.rightImg &&
+        productDev.text
+      )
+    ) {
       return toast.error("All fields are required");
     }
 
-    if (!(productDev.leftImg && productDev.centerImg && productDev.rightImg)) {
-      return toast.error("Wait before the image to upload");
-    }
-
     api("post", "/productDev", productDev).then((res) => {
-      toast.success("Product Development edited successfully");
+      toast.success("productDev added successfully");
       getProductDev();
       handleModal();
     });
@@ -61,7 +65,7 @@ const EditProductDev = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit Product Development
+          Add Product Development
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -79,7 +83,7 @@ const EditProductDev = ({
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="leftImg"
+                          id="image"
                           name="leftImg"
                           type="file"
                           onChange={handleFileChange}
@@ -164,7 +168,7 @@ const EditProductDev = ({
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmit}>
-            Update
+            Save
           </Button>
 
           <Button onClick={handleModal}>Cancel</Button>
@@ -174,4 +178,4 @@ const EditProductDev = ({
   );
 };
 
-export default EditProductDev;
+export default AddLayout2;

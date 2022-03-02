@@ -19,46 +19,38 @@ import FontPicker from "components/FontPicker";
 
 const { Option } = Select;
 
-const EditAdvertising = ({
-  openModal,
-  handleModal,
-  advertising,
-  setAdvertising,
-  getAdvertising,
-}) => {
+const EditPages = ({ openModal, handleModal, pages, setPages, getPages }) => {
   const handleInput = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: e.target.value });
+    setPages({ ...pages, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
-    setAdvertising({ ...advertising, [e.target.name]: "" });
+    setPages({ ...pages, [e.target.name]: "" });
 
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
       toast.success("Image uploaded successfully");
-      setAdvertising({ ...advertising, [e.target.name]: res.url });
+      setPages({ ...pages, [e.target.name]: res.url });
     });
   };
 
   const handleOnChange = () => {
-    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+    setPages((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(advertising.title && advertising.text && advertising.textbottom)) {
+    if (!(pages.title && pages.text && pages.textbottom)) {
       return toast.error("All fields are required");
     }
 
-    if (
-      !(advertising.leftImg && advertising.rightImg && advertising.centerImg)
-    ) {
+    if (!(pages.leftImg && pages.rightImg && pages.centerImg)) {
       return toast.error("Wait before the image to upload");
     }
 
-    api("post", "/advertising", advertising).then((res) => {
-      toast.success("Advertising edited successfully");
-      getAdvertising();
+    api("post", "/advertising", pages).then((res) => {
+      toast.success("pages edited successfully");
+      getPages();
       handleModal();
     });
   };
@@ -67,7 +59,7 @@ const EditAdvertising = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit Advertising
+          Edit pages
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -79,7 +71,7 @@ const EditAdvertising = ({
                       <FormGroup>
                         <label className="form-control-label" htmlFor="leftImg">
                           <span style={{ color: "red" }}>
-                            {advertising.leftImg ? "" : "*"}
+                            {pages.leftImg ? "" : "*"}
                           </span>{" "}
                           Left Image <i className="ni ni-album-2" />
                         </label>
@@ -99,7 +91,7 @@ const EditAdvertising = ({
                           htmlFor="centerImg"
                         >
                           <span style={{ color: "red" }}>
-                            {advertising.centerImg ? "" : "*"}
+                            {pages.centerImg ? "" : "*"}
                           </span>{" "}
                           Center Image <i className="ni ni-album-2" />
                         </label>
@@ -119,7 +111,7 @@ const EditAdvertising = ({
                           htmlFor="rightImg"
                         >
                           <span style={{ color: "red" }}>
-                            {advertising.rightImg ? "" : "*"}
+                            {pages.rightImg ? "" : "*"}
                           </span>{" "}
                           Right Image <i className="ni ni-album-2" />
                         </label>
@@ -140,31 +132,31 @@ const EditAdvertising = ({
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.title ? "" : "*"}{" "}
+                            {pages.title ? "" : "*"}{" "}
                           </span>
                           Title
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's title here"
+                          placeholder="Enter pages's title here"
                           type="text"
-                          value={advertising.title}
+                          value={pages.title}
                           name="title"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                     <FontPicker
-                      data={advertising}
-                      setData={setAdvertising}
+                      data={pages}
+                      setData={setPages}
                       fieldName="title_font"
                     />
                   </Row>
                   <Row>
                     <FontPicker
-                      data={advertising}
-                      setData={setAdvertising}
+                      data={pages}
+                      setData={setPages}
                       fieldName="text_font"
                       width="12"
                     />
@@ -175,16 +167,16 @@ const EditAdvertising = ({
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.text ? "" : "*"}{" "}
+                            {pages.text ? "" : "*"}{" "}
                           </span>
                           Text
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's text here"
+                          placeholder="Enter pages's text here"
                           type="textarea"
-                          value={advertising.text}
+                          value={pages.text}
                           name="text"
                           onChange={handleInput}
                         />
@@ -197,24 +189,24 @@ const EditAdvertising = ({
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {advertising.textbottom ? "" : "*"}{" "}
+                            {pages.textbottom ? "" : "*"}{" "}
                           </span>
                           Text Bottom
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter advertising's textbottom here"
+                          placeholder="Enter pages's textbottom here"
                           type="text"
-                          value={advertising.textbottom}
+                          value={pages.textbottom}
                           name="textbottom"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                     <FontPicker
-                      data={advertising}
-                      setData={setAdvertising}
+                      data={pages}
+                      setData={setPages}
                       fieldName="textbottom_font"
                     />
                   </Row>
@@ -224,14 +216,14 @@ const EditAdvertising = ({
                         <input
                           type="checkbox"
                           class="custom-control-input"
-                          id={`customCheck1${advertising.contactbutton}`}
+                          id={`customCheck1${pages.contactbutton}`}
                           className="custom-control-input"
-                          checked={advertising.contactbutton}
+                          checked={pages.contactbutton}
                           onChange={handleOnChange}
                         />
                         <label
                           class="custom-control-label"
-                          for={`customCheck1${advertising.contactbutton}`}
+                          for={`customCheck1${pages.contactbutton}`}
                         >
                           Contact Button
                         </label>
@@ -255,4 +247,4 @@ const EditAdvertising = ({
   );
 };
 
-export default EditAdvertising;
+export default EditPages;

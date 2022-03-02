@@ -16,14 +16,10 @@
 
 */
 import Index from "views/Index.js";
-import Advertising from "views/advertising/Advertising";
-import Consulting from "views/consulting/Consulting";
+import Pages from "views/pages/Pages";
 import Contact from "views/contact/Contact";
 import HomeScreen from "views/home/HomeScreen";
-import Navigation from "views/navigation/Navigation";
-import ProductDev from "views/productDev/ProductDev";
 import Products from "views/products/Products";
-import Reviews from "views/reviews/Reviews";
 import Register from "views/Register.js";
 import Login from "views/Login.js";
 
@@ -36,12 +32,13 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/navigation",
-    name: "Navigation",
-    icon: "ni ni-square-pin text-primary",
-    component: Navigation,
+    path: "/advertising",
+    name: "Pages",
+    icon: "ni ni-notification-70 text-primary",
+    component: Pages,
     layout: "/admin",
   },
+
   {
     path: "/home",
     name: "Home Screen",
@@ -49,34 +46,7 @@ var routes = [
     component: HomeScreen,
     layout: "/admin",
   },
-  {
-    path: "/reviews",
-    name: "Reviews",
-    icon: "ni ni-single-02 text-primary",
-    component: Reviews,
-    layout: "/admin",
-  },
-  {
-    path: "/advertising",
-    name: "Advertising",
-    icon: "ni ni-notification-70 text-primary",
-    component: Advertising,
-    layout: "/admin",
-  },
-  {
-    path: "/productDev",
-    name: "Product Dev",
-    icon: "ni ni-album-2 text-orange",
-    component: ProductDev,
-    layout: "/admin",
-  },
-  {
-    path: "/consulting",
-    name: "Consulting",
-    icon: "ni ni-briefcase-24 text-success",
-    component: Consulting,
-    layout: "/admin",
-  },
+
   {
     path: "/products",
     name: "Products",
@@ -86,7 +56,7 @@ var routes = [
   },
   {
     path: "/contact",
-    name: "Contacts",
+    name: "Contact Us",
     icon: "ni ni-email-83 text-orange",
     component: Contact,
     layout: "/admin",

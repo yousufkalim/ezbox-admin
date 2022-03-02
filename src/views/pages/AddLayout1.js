@@ -21,23 +21,30 @@ import FontPicker from "components/FontPicker";
 
 const { Option } = Select;
 
-const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
-  let [productDev, setProductDev] = useState({
+const AddLayout1 = ({ openModal, handleModal, getAdvertising }) => {
+  let [advertising, setAdvertising] = useState({
+    title: "",
     text: "",
     leftImg: "",
     centerImg: "",
     rightImg: "",
+    textbottom: "",
+    contactbutton: true,
   });
 
+  const handleOnChange = () => {
+    setAdvertising((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+  };
+
   const handleInput = (e) => {
-    setProductDev({ ...productDev, [e.target.name]: e.target.value });
+    setAdvertising({ ...advertising, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
       toast.success("Image uploaded successfully");
-      setProductDev({ ...productDev, [e.target.name]: res.url });
+      setAdvertising({ ...advertising, [e.target.name]: res.url });
     });
   };
 
@@ -45,18 +52,20 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
     e.preventDefault();
     if (
       !(
-        productDev.leftImg &&
-        productDev.centerImg &&
-        productDev.rightImg &&
-        productDev.text
+        advertising.title &&
+        advertising.text &&
+        advertising.leftImg &&
+        advertising.rightImg &&
+        advertising.centerImg &&
+        advertising.textbottom
       )
     ) {
       return toast.error("All fields are required");
     }
 
-    api("post", "/productDev", productDev).then((res) => {
-      toast.success("productDev added successfully");
-      getProductDev();
+    api("post", "/advertising", advertising).then((res) => {
+      toast.success("Advertising added successfully");
+      getAdvertising();
       handleModal();
     });
   };
@@ -65,25 +74,25 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Product Development
+          Add Advertising
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col>
               <Form>
-                <div className="px-lg-4">
+                <div className="pl-lg-4">
                   <Row>
                     <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="leftImg">
                           <span style={{ color: "red" }}>
-                            {productDev.leftImg ? "" : "*"}
+                            {advertising.leftImg ? "" : "*"}
                           </span>{" "}
                           Left Image <i className="ni ni-album-2" />
                         </label>
                         <Input
                           className="form-control-file form"
-                          id="image"
+                          id="leftImg"
                           name="leftImg"
                           type="file"
                           onChange={handleFileChange}
@@ -97,7 +106,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                           htmlFor="centerImg"
                         >
                           <span style={{ color: "red" }}>
-                            {productDev.centerImg ? "" : "*"}
+                            {advertising.centerImg ? "" : "*"}
                           </span>{" "}
                           Center Image <i className="ni ni-album-2" />
                         </label>
@@ -117,7 +126,7 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                           htmlFor="rightImg"
                         >
                           <span style={{ color: "red" }}>
-                            {productDev.rightImg ? "" : "*"}
+                            {advertising.rightImg ? "" : "*"}
                           </span>{" "}
                           Right Image <i className="ni ni-album-2" />
                         </label>
@@ -131,34 +140,109 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
                       </FormGroup>
                     </Col>
                   </Row>
+
+                  <Row>
+                    <Col lg="8" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {advertising.title ? "" : "*"}{" "}
+                          </span>
+                          Title
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter advertising's title here"
+                          type="text"
+                          value={advertising.title}
+                          name="title"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <FontPicker
+                      data={advertising}
+                      setData={setAdvertising}
+                      fieldName="title_font"
+                    />
+                  </Row>
                   <Row>
                     <FontPicker
-                      data={productDev}
-                      setData={setProductDev}
+                      data={advertising}
+                      setData={setAdvertising}
                       fieldName="text_font"
                       width="12"
                     />
                   </Row>
                   <Row>
-                    <Col lg="12">
+                    <Col lg="12" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {productDev.text ? "" : "*"}{" "}
+                            {advertising.text ? "" : "*"}{" "}
                           </span>
                           Text
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter productDev's text here"
+                          placeholder="Enter advertising's text here"
                           type="textarea"
-                          value={productDev.text}
+                          value={advertising.text}
                           name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg="8" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {advertising.textbottom ? "" : "*"}{" "}
+                          </span>
+                          Text Bottom
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter advertising's textbottom here"
+                          type="text"
+                          value={advertising.textbottom}
+                          name="textbottom"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <FontPicker
+                      data={advertising}
+                      setData={setAdvertising}
+                      fieldName="textbottom_font"
+                    />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${advertising.contactbutton}`}
+                          checked={advertising.contactbutton}
+                          className="custom-control-input"
+                          onChange={handleOnChange}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${advertising.contactbutton}`}
+                        >
+                          Contact Button
+                        </label>
+                      </div>
                     </Col>
                   </Row>
                 </div>
@@ -178,4 +262,4 @@ const AddProductDev = ({ openModal, handleModal, getProductDev }) => {
   );
 };
 
-export default AddProductDev;
+export default AddLayout1;

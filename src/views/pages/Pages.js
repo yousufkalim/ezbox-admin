@@ -35,33 +35,29 @@ import {
 } from "reactstrap";
 
 // core components
-import AddAdvertising from "./AddAdvertising";
-import EditAdvertising from "./EditAdvertising";
+import AddPages from "./AddPages";
+import EditPages from "./EditPages";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Advertising = ({ status }) => {
+const Pages = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const history = useHistory();
   const [data, setData] = useState({});
-  const [advertising, setAdvertising] = useState({
+  const [pages, setPages] = useState({
     _id: "",
     title: "",
-    text: "",
-    leftImg: "",
-    centerImg: "",
-    rightImg: "",
-    textbottom: "",
-    contactbutton: true,
+    route: "",
+    layout: "",
   });
 
   useEffect(() => {
-    getAdvertising();
+    getPages();
   }, []);
 
-  const getAdvertising = async () => {
-    const data = await api("get", "/advertising");
+  const getPages = async () => {
+    const data = await api("get", "/pages");
     setData(data.advertise);
     console.log("====", data.advertise);
   };
@@ -73,18 +69,11 @@ const Advertising = ({ status }) => {
 
   const handleEditModal = (item) => {
     if (item) {
-      setAdvertising({
+      setPages({
         _id: item._id,
         title: item.title,
-        title_font: item.title_font,
-        text: item.text,
-        text_font: item.text_font,
-        leftImg: item.leftImg,
-        centerImg: item.centerImg,
-        rightImg: item.rightImg,
-        textbottom: item.textbottom,
-        textbottom_font: item.textbottom_font,
-        contactbutton: item.contactbutton,
+        route: item.route,
+        layout: item.layout,
       });
     }
 
@@ -93,9 +82,9 @@ const Advertising = ({ status }) => {
   };
 
   const handleDelete = () => {
-    api("delete", "/advertising").then(() => {
-      toast.success("Advertising deleted successfully");
-      getAdvertising();
+    api("delete", "/pages").then(() => {
+      toast.success("pages deleted successfully");
+      getPages();
     });
   };
 
@@ -110,7 +99,7 @@ const Advertising = ({ status }) => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
-                  <h3 className="mb-0">Advertising</h3>
+                  <h3 className="mb-0">Pages</h3>
                   <Button
                     color="primary"
                     href="#pablo"
@@ -118,19 +107,16 @@ const Advertising = ({ status }) => {
                     size="md"
                   >
                     <i className="ni ni-fat-add"></i>
-                    Add Advertising
+                    Add Page
                   </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Layout</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Text</th>
-                    <th scope="col">Text Bottom</th>
-                    <th scope="col">Contact Button</th>
-
-                    <th scope="col" />
+                    <th scope="col">Route</th> <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
@@ -139,28 +125,23 @@ const Advertising = ({ status }) => {
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
-                            <span className="mb-0 text-sm" title={data.title}>
-                              {data.title?.length > 30
-                                ? data.title?.substring(0, 30) + "..."
-                                : data.title}
+                            <span className="mb-0 text-sm" title={data.layout}>
+                              {data.layout?.length > 30
+                                ? data.layout?.substring(0, 30) + "..."
+                                : data.layout}
                             </span>
                           </Media>
                         </Media>
                       </th>
-                      <td title={data.text}>
-                        {data.text?.length > 30
-                          ? data.text?.substring(0, 30) + "..."
-                          : data.text}
+                      <td title={data.title}>
+                        {data.title?.length > 30
+                          ? data.title?.substring(0, 30) + "..."
+                          : data.title}
                       </td>
-                      <td title={data.textbottom}>
-                        {data.textbottom?.length > 30
-                          ? data.textbottom?.substring(0, 30) + "..."
-                          : data.textbottom}
-                      </td>
-
-                      <td title={data.contactbutton}>
-                        {" "}
-                        {data.contactbutton ? "Enabled" : "Disabled"}
+                      <td title={data.route}>
+                        {data.route?.length > 30
+                          ? data.route?.substring(0, 30) + "..."
+                          : data.route}
                       </td>
 
                       <td className="text-right">
@@ -176,15 +157,6 @@ const Advertising = ({ status }) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            {/* {item.test_conducted && (
-                                <DropdownItem
-                                  onClick={() =>
-                                    history.push(`/admin/users/${item._id}`)
-                                  }
-                                >
-                                  View
-                                </DropdownItem>
-                              )} */}
                             <DropdownItem
                               href="#pablo"
                               onClick={() => handleEditModal(data)}
@@ -213,19 +185,19 @@ const Advertising = ({ status }) => {
           </div>
         </Row>
         {openModal && (
-          <AddAdvertising
+          <AddPages
             openModal={openModal}
             handleModal={handleModal}
-            getAdvertising={getAdvertising}
+            getPages={getPages}
           />
         )}
         {editModal && (
-          <EditAdvertising
+          <EditPages
             openModal={editModal}
             handleModal={handleEditModal}
-            advertising={advertising}
-            setAdvertising={setAdvertising}
-            getAdvertising={getAdvertising}
+            pages={pages}
+            setPages={setPages}
+            getPages={getPages}
           />
         )}
       </Container>
@@ -233,4 +205,4 @@ const Advertising = ({ status }) => {
   );
 };
 
-export default Advertising;
+export default Pages;

@@ -15,48 +15,45 @@ import {
   Col,
   Label,
 } from "reactstrap";
+import { tuple } from "antd/lib/_util/type";
 import FontPicker from "components/FontPicker";
 // core components
 
 const { Option } = Select;
 
-const AddReview = ({ openModal, handleModal, getReviews }) => {
-  let [review, setReview] = useState({
-    name: "",
+const AddLayout3 = ({ openModal, handleModal, getConsulting }) => {
+  let [consulting, setConsulting] = useState({
+    text: "",
     image: "",
-    rating: "",
-    message: "",
+    textbottom: "",
+    contactbutton: true,
   });
 
   const handleOnChange = () => {
-    setReview((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
+    setConsulting((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleInput = (e) => {
-    setReview({ ...review, [e.target.name]: e.target.value });
+    setConsulting({ ...consulting, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     api("post", "/image", formData).then((res) => {
       toast.success("Image uploaded successfully");
-      setReview({ ...review, [e.target.name]: res.url });
+      setConsulting({ ...consulting, [e.target.name]: res.url });
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(review.name && review.image && review.message)) {
+    if (!(consulting.text && consulting.image && consulting.textbottom)) {
       return toast.error("All fields are required");
     }
 
-    if (!review.rating) {
-      return toast.error("Rating should be in number");
-    }
-
-    api("post", "/reviews", review).then((res) => {
-      toast.success("review added successfully");
-      getReviews();
+    api("post", "/consulting", consulting).then((res) => {
+      toast.success("consulting added successfully");
+      getConsulting();
       handleModal();
     });
   };
@@ -65,7 +62,7 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add review
+          Add Consulting
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -77,7 +74,7 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                       <FormGroup>
                         <label className="form-control-label" htmlFor="image">
                           <span style={{ color: "red" }}>
-                            {review.image ? "" : "*"}
+                            {consulting.image ? "" : "*"}
                           </span>{" "}
                           Image <i className="ni ni-album-2" />
                         </label>
@@ -91,54 +88,13 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                       </FormGroup>
                     </Col>
                   </Row>
-
                   <Row>
-                    <Col lg="4" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {review.name ? "" : "*"}{" "}
-                          </span>
-                          Name
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative name-default"
-                          required={true}
-                          placeholder="Enter review's name here"
-                          type="text"
-                          value={review.name}
-                          name="name"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
                     <FontPicker
-                      data={review}
-                      setData={setReview}
-                      fieldName="name_font"
+                      data={consulting}
+                      setData={setConsulting}
+                      fieldName="text_font"
+                      width="12"
                     />
-                    <Col lg="4" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {review.rating ? "" : "*"}{" "}
-                          </span>
-                          Rating
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter review's rating here"
-                          type="number"
-                          value={review.rating}
-                          name="rating"
-                          onChange={handleInput}
-                          max={5}
-                        />
-                      </FormGroup>
-                    </Col>{" "}
                   </Row>
                   <Row>
                     <Col lg="12" style={{ margin: "auto" }}>
@@ -146,29 +102,68 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {review.message ? "" : "*"}{" "}
+                            {consulting.text ? "" : "*"}{" "}
                           </span>
-                          Message
+                          Text
                         </label>{" "}
                         <Input
-                          className="form-control-alternative name-default"
+                          className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter review's message here"
+                          placeholder="Enter consulting's text here"
                           type="textarea"
-                          value={review.message}
-                          name="message"
+                          value={consulting.text}
+                          name="text"
                           onChange={handleInput}
                         />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
+                    <Col lg="8" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {consulting.textbottom ? "" : "*"}{" "}
+                          </span>
+                          Text Bottom
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter consulting's textbottom here"
+                          type="text"
+                          value={consulting.textbottom}
+                          name="textbottom"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
                     <FontPicker
-                      data={review}
-                      setData={setReview}
-                      fieldName="message_font"
-                      width="12"
+                      data={consulting}
+                      setData={setConsulting}
+                      fieldName="textbottom_font"
                     />
+                  </Row>
+                  <Row>
+                    <Col lg="12" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1${consulting.contactbutton}`}
+                          checked={consulting.contactbutton}
+                          className="custom-control-input"
+                          onChange={handleOnChange}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1${consulting.contactbutton}`}
+                        >
+                          Contact Button
+                        </label>
+                      </div>
+                    </Col>
                   </Row>
                 </div>
               </Form>
@@ -187,4 +182,4 @@ const AddReview = ({ openModal, handleModal, getReviews }) => {
   );
 };
 
-export default AddReview;
+export default AddLayout3;
