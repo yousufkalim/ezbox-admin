@@ -14,6 +14,7 @@ import {
   Row,
   Col,
   Table,
+  Label,
   Media,
 } from "reactstrap";
 import FontPicker from "components/FontPicker";
@@ -25,18 +26,13 @@ import layout3 from "assets/img/layouts/layout3.png";
 
 const { Option } = Select;
 
-const AddPages = ({ openModal, handleModal, getpages }) => {
-  let [pages, setPages] = useState({
-    title: "",
-    route: "",
-    layout: "",
-  });
-
+const AddPages = ({ openModal, handleModal, getpages, pages, setPages }) => {
   const handleOnChange = () => {
     setPages((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
   };
 
   const handleInput = (e) => {
+    console.log(e.target.name, e.target.value);
     setPages({ ...pages, [e.target.name]: e.target.value });
   };
   const handleFileChange = (e) => {
@@ -50,11 +46,11 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(pages.title && pages.route)) {
+    if (!(pages.name && pages.path)) {
       return toast.error("All fields are required");
     }
 
-    api("post", "/adverstising", pages).then((res) => {
+    api("post", "/pages", pages).then((res) => {
       toast.success("pages added successfully");
       getpages();
       handleModal();
@@ -72,73 +68,13 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
             <Col>
               <Form>
                 <div className="pl-lg-4">
-                  {/* <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label className="form-control-label" htmlFor="leftImg">
-                          <span style={{ color: "red" }}>
-                            {pages.leftImg ? "" : "*"}
-                          </span>{" "}
-                          Left Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="leftImg"
-                          name="leftImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="centerImg"
-                        >
-                          <span style={{ color: "red" }}>
-                            {pages.centerImg ? "" : "*"}
-                          </span>{" "}
-                          Center Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="centerImg"
-                          name="centerImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="rightImg"
-                        >
-                          <span style={{ color: "red" }}>
-                            {pages.rightImg ? "" : "*"}
-                          </span>{" "}
-                          Right Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="rightImg"
-                          name="rightImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row> */}
-
                   <Row>
                     <Col lg="6" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {pages.title ? "" : "*"}{" "}
+                            {pages.name ? "" : "*"}{" "}
                           </span>
                           Page Title
                         </label>{" "}
@@ -147,8 +83,8 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
                           required={true}
                           placeholder="Enter pages's title here"
                           type="text"
-                          value={pages.title}
-                          name="title"
+                          value={pages.name}
+                          name="name"
                           onChange={handleInput}
                         />
                       </FormGroup>
@@ -158,17 +94,17 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
                         <label className="form-control-label">
                           {" "}
                           <span style={{ color: "red" }}>
-                            {pages.route ? "" : "*"}{" "}
+                            {pages.path ? "" : "*"}{" "}
                           </span>
-                          Route
+                          Path
                         </label>{" "}
                         <Input
                           className="form-control-alternative text-default"
                           required={true}
-                          placeholder="Enter pages's route here"
+                          placeholder="Enter pages's path here"
                           type="text"
-                          value={pages.route}
-                          name="route"
+                          value={pages.path}
+                          name="path"
                           onChange={handleInput}
                         />
                       </FormGroup>
@@ -184,38 +120,159 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
                   </Row> */}
 
                   <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
+                    <Col lg="6">
                       <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
+                        <Label
+                          for="exampleSelect"
+                          className="form-control-label"
+                        >
                           <span style={{ color: "red" }}>
-                            {pages.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Select layout:
-                        </label>
+                            {pages.rel ? "" : "*"}
+                          </span>{" "}
+                          Select Page
+                        </Label>
+                        <Input
+                          id="exampleSelect"
+                          name="rel"
+                          className="form-control-alternative"
+                          type="select"
+                          value={pages.rel}
+                          onChange={handleInput}
+                        >
+                          <option value="External" selected>
+                            External
+                          </option>
+                          <option value="Internal">Internal</option>
+                          <option value="Contacts">Contacts</option>
+                          <option value="Products">Products</option>
+                        </Input>
                       </FormGroup>
                     </Col>
-                    <Table className="table table-borderless align-items-center">
+                  </Row>
+                  {pages.rel === "Internal" && (
+                    <div>
+                      <Row>
+                        <Col lg="12" style={{ margin: "auto" }}>
+                          <FormGroup>
+                            <label className="form-control-label">
+                              {" "}
+                              <span style={{ color: "red" }}>
+                                {pages.layout ? "" : "*"}{" "}
+                              </span>
+                              Select layout:
+                            </label>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="4" style={{ margin: "auto" }}>
+                          <label htmlFor="layout1">
+                            <Media>
+                              <img
+                                src={layout1}
+                                height="50%"
+                                width="50%"
+                                alt="layout1"
+                                style={{
+                                  margin: "auto",
+                                  border:
+                                    pages.layout === "type1"
+                                      ? "2px solid #008080"
+                                      : "none",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Media>
+                          </label>
+                          <input
+                            className="custom-control-input"
+                            id="layout1"
+                            name="layout"
+                            type="radio"
+                            value="type1"
+                            // hidden={true}
+                            checked={pages.layout === "type1"}
+                            onChange={handleInput}
+                          />
+                        </Col>
+
+                        <Col lg="4" style={{ margin: "auto" }}>
+                          <label htmlFor="layout2">
+                            <Media>
+                              <img
+                                src={layout2}
+                                height="50%"
+                                width="50%"
+                                alt="layout2"
+                                style={{
+                                  margin: "auto",
+                                  border:
+                                    pages.layout === "type2"
+                                      ? "2px solid #008080"
+                                      : "none",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Media>
+                          </label>
+                          <input
+                            className="custom-control-input"
+                            id="layout2"
+                            name="layout"
+                            type="radio"
+                            value="type2"
+                            // hidden={true}
+
+                            checked={pages.layout === "type2"}
+                            onChange={handleInput}
+                          />
+                        </Col>
+
+                        <Col lg="4" style={{ margin: "auto" }}>
+                          <label htmlFor="layout3">
+                            <Media>
+                              <img
+                                src={layout3}
+                                height="50%"
+                                width="50%"
+                                alt="layout3"
+                                style={{
+                                  margin: "auto",
+                                  border:
+                                    pages.layout === "type3"
+                                      ? "2px solid #008080"
+                                      : "none",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Media>
+                          </label>
+                          <input
+                            className="custom-control-input"
+                            id="layout3"
+                            value="type3"
+                            name="layout"
+                            type="radio"
+                            // hidden={true}
+                            checked={pages.layout === "type3"}
+                            onChange={handleInput}
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+                  {/* <Table className="table table-borderless align-items-center">
                       <tr>
+                        <td></td>
                         <td>
-                          <Media className="align-items-center">
-                            {/* <input
-                              className="custom-control-input"
-                              id="layout1"
-                              name="layout-1"
-                              type="radio"
-                              checked={pages.radio}
-                              onChange={handleOnChange}
-                            />{" "} */}
-                            <img
-                              src={layout1}
-                              height="50%"
-                              width="50%"
-                              alt="layout1"
-                            />
-                          </Media>
-                        </td>
-                        <td>
+                          <input
+                            className="custom-control-input"
+                            id="layout2"
+                            name="layout"
+                            type="radio"
+                            checked={pages.radio}
+                            onChange={handleOnChange}
+                          />{" "}
                           <Media className="align-items-center">
                             <img
                               src={layout2}
@@ -230,7 +287,7 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
                             <input
                               className="custom-control-input"
                               id="layout3"
-                              name="layout-3"
+                              name="layout"
                               type="radio"
                               checked={pages.radio}
                               onChange={handleOnChange}
@@ -239,13 +296,13 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
                               src={layout3}
                               height="50%"
                               width="50%"
-                              alt="layout1"
+                              alt="layout3"
                             />
                           </Media>
                         </td>
                       </tr>
-                    </Table>
-                  </Row>
+                    </Table> */}
+
                   {/* <Row>
                     <Col lg="12" style={{ margin: "auto" }}>
                       <div class="custom-control custom-checkbox">
@@ -272,10 +329,15 @@ const AddPages = ({ openModal, handleModal, getpages }) => {
           </Row>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Next
-          </Button>
-
+          {pages.rel === "Internal" ? (
+            <Button color="primary" onClick={handleSubmit}>
+              Next
+            </Button>
+          ) : (
+            <Button color="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
+          )}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>

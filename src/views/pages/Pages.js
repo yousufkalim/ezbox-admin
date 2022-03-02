@@ -36,6 +36,9 @@ import {
 
 // core components
 import AddPages from "./AddPages";
+import AddLayout1 from "./AddLayout1";
+import AddLayout2 from "./AddLayout2";
+import AddLayout3 from "./AddLayout3";
 import EditPages from "./EditPages";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
@@ -45,11 +48,18 @@ const Pages = ({ status }) => {
   const [editModal, setEditModal] = useState(false);
   const history = useHistory();
   const [data, setData] = useState({});
+
   const [pages, setPages] = useState({
     _id: "",
-    title: "",
-    route: "",
+    name: "",
+    path: "",
     layout: "",
+  });
+  let [page, setPage] = useState({
+    name: "",
+    path: "",
+    layout: "",
+    rel: "",
   });
 
   useEffect(() => {
@@ -57,9 +67,9 @@ const Pages = ({ status }) => {
   }, []);
 
   const getPages = async () => {
-    const data = await api("get", "/pages");
-    setData(data.advertise);
-    console.log("====", data.advertise);
+    const pages = await api("get", "/pages");
+    setData(pages);
+    console.log("====", pages);
   };
 
   const handleModal = () => {
@@ -71,8 +81,8 @@ const Pages = ({ status }) => {
     if (item) {
       setPages({
         _id: item._id,
-        title: item.title,
-        route: item.route,
+        name: item.name,
+        path: item.path,
         layout: item.layout,
       });
     }
@@ -116,7 +126,7 @@ const Pages = ({ status }) => {
                   <tr>
                     <th scope="col">Layout</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Route</th> <th scope="col" />
+                    <th scope="col">Path</th> <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
@@ -133,15 +143,15 @@ const Pages = ({ status }) => {
                           </Media>
                         </Media>
                       </th>
-                      <td title={data.title}>
-                        {data.title?.length > 30
-                          ? data.title?.substring(0, 30) + "..."
-                          : data.title}
+                      <td title={data.name}>
+                        {data.name?.length > 30
+                          ? data.name?.substring(0, 30) + "..."
+                          : data.name}
                       </td>
-                      <td title={data.route}>
-                        {data.route?.length > 30
-                          ? data.route?.substring(0, 30) + "..."
-                          : data.route}
+                      <td title={data.path}>
+                        {data.path?.length > 30
+                          ? data.path?.substring(0, 30) + "..."
+                          : data.path}
                       </td>
 
                       <td className="text-right">
@@ -189,6 +199,8 @@ const Pages = ({ status }) => {
             openModal={openModal}
             handleModal={handleModal}
             getPages={getPages}
+            setPages={setPage}
+            pages={page}
           />
         )}
         {editModal && (
@@ -200,6 +212,14 @@ const Pages = ({ status }) => {
             getPages={getPages}
           />
         )}
+
+        {/* Add Layouts */}
+        {page.layout === "type1" && (
+          <AddLayout1 openModal={openModal} handleModal={handleModal} />
+        )}
+        {page.layout === "type2" && <AddLayout2 />}
+        {page.layout === "type3" && <AddLayout3 />}
+        {/* {pages.layout === "type1" && } */}
       </Container>
     </>
   );
