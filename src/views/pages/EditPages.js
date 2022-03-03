@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
 import {
   Modal,
   ModalBody,
@@ -13,43 +12,77 @@ import {
   Input,
   Row,
   Col,
+  Table,
+  Label,
+  Media,
 } from "reactstrap";
-import FontPicker from "components/FontPicker";
-// core components
+import PageForm from "./PageForm";
+import LayoutForm1 from "./LayoutForm1";
+import LayoutForm2 from "./LayoutForm2";
+import LayoutForm3 from "./LayoutForm3";
 
-const { Option } = Select;
+const AddPages = ({
+  openModal,
+  handleModal,
+  getPages,
+  page,
+  setPage,
+  layout,
+  setLayout,
+}) => {
+  let [step, setStep] = useState(0);
 
-const EditPages = ({ openModal, handleModal, pages, setPages, getPages }) => {
-  const handleInput = (e) => {
-    setPages({ ...pages, [e.target.name]: e.target.value });
+  const handleStepChange = () => {
+    if (page.layout_type === "type1") {
+      setStep(1);
+    } else if (page.layout_type === "type2") {
+      setStep(2);
+    } else if (page.layout_type === "type3") {
+      setStep(3);
+    }
   };
-  const handleFileChange = (e) => {
-    setPages({ ...pages, [e.target.name]: "" });
 
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    api("post", "/image", formData).then((res) => {
-      toast.success("Image uploaded successfully");
-      setPages({ ...pages, [e.target.name]: res.url });
-    });
-  };
-
-  const handleOnChange = () => {
-    setPages((prev) => ({ ...prev, contactbutton: !prev.contactbutton }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (!(pages.title && pages.text && pages.textbottom)) {
+    let formData = page;
+
+    if (!(page.name && page.path)) {
       return toast.error("All fields are required");
     }
 
-    if (!(pages.leftImg && pages.rightImg && pages.centerImg)) {
-      return toast.error("Wait before the image to upload");
+    if (step === 1) {
+      if (
+        !(
+          layout.title &&
+          layout.text &&
+          layout.leftImg &&
+          layout.rightImg &&
+          layout.centerImg &&
+          layout.textbottom
+        )
+      ) {
+        return toast.error("All fields are required");
+      } else {
+        formData = { ...formData, layout };
+      }
+    } else if (step === 2) {
+      if (
+        !(layout.leftImg && layout.centerImg && layout.rightImg && layout.text)
+      ) {
+        return toast.error("All fields are required");
+      } else {
+        formData = { ...formData, layout };
+      }
+    } else if (step === 3) {
+      if (!(layout.text && layout.image && layout.textbottom)) {
+        return toast.error("All fields are required");
+      } else {
+        formData = { ...formData, layout };
+      }
     }
 
-    api("post", "/advertising", pages).then((res) => {
-      toast.success("pages edited successfully");
+    api("put", `/pages/${formData._id}`, formData).then(res => {
+      toast.success("Page updated successfully");
       getPages();
       handleModal();
     });
@@ -59,187 +92,23 @@ const EditPages = ({ openModal, handleModal, pages, setPages, getPages }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Edit pages
+          Add Page
         </ModalHeader>
-        <ModalBody>
-          <Row>
-            <Col>
-              <Form>
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label className="form-control-label" htmlFor="leftImg">
-                          <span style={{ color: "red" }}>
-                            {pages.leftImg ? "" : "*"}
-                          </span>{" "}
-                          Left Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="leftImg"
-                          name="leftImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="centerImg"
-                        >
-                          <span style={{ color: "red" }}>
-                            {pages.centerImg ? "" : "*"}
-                          </span>{" "}
-                          Center Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="centerImg"
-                          name="centerImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col lg="4">
-                      <FormGroup>
-                        <label
-                          className="form-control-label"
-                          htmlFor="rightImg"
-                        >
-                          <span style={{ color: "red" }}>
-                            {pages.rightImg ? "" : "*"}
-                          </span>{" "}
-                          Right Image <i className="ni ni-album-2" />
-                        </label>
-                        <Input
-                          className="form-control-file form"
-                          id="rightImg"
-                          name="rightImg"
-                          type="file"
-                          onChange={handleFileChange}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+        {step === 0 && <PageForm page={page} setPage={setPage} />}
+        {step === 1 && <LayoutForm1 layout={layout} setLayout={setLayout} />}
+        {step === 2 && <LayoutForm2 layout={layout} setLayout={setLayout} />}
+        {step === 3 && <LayoutForm3 layout={layout} setLayout={setLayout} />}
 
-                  <Row>
-                    <Col lg="8" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {pages.title ? "" : "*"}{" "}
-                          </span>
-                          Title
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter pages's title here"
-                          type="text"
-                          value={pages.title}
-                          name="title"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <FontPicker
-                      data={pages}
-                      setData={setPages}
-                      fieldName="title_font"
-                    />
-                  </Row>
-                  <Row>
-                    <FontPicker
-                      data={pages}
-                      setData={setPages}
-                      fieldName="text_font"
-                      width="12"
-                    />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {pages.text ? "" : "*"}{" "}
-                          </span>
-                          Text
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter pages's text here"
-                          type="textarea"
-                          value={pages.text}
-                          name="text"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="8" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          {" "}
-                          <span style={{ color: "red" }}>
-                            {pages.textbottom ? "" : "*"}{" "}
-                          </span>
-                          Text Bottom
-                        </label>{" "}
-                        <Input
-                          className="form-control-alternative text-default"
-                          required={true}
-                          placeholder="Enter pages's textbottom here"
-                          type="text"
-                          value={pages.textbottom}
-                          name="textbottom"
-                          onChange={handleInput}
-                        />
-                      </FormGroup>
-                    </Col>
-                    <FontPicker
-                      data={pages}
-                      setData={setPages}
-                      fieldName="textbottom_font"
-                    />
-                  </Row>
-                  <Row>
-                    <Col lg="12" style={{ margin: "auto" }}>
-                      <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id={`customCheck1${pages.contactbutton}`}
-                          className="custom-control-input"
-                          checked={pages.contactbutton}
-                          onChange={handleOnChange}
-                        />
-                        <label
-                          class="custom-control-label"
-                          for={`customCheck1${pages.contactbutton}`}
-                        >
-                          Contact Button
-                        </label>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </Form>
-            </Col>
-          </Row>
-        </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Update
-          </Button>
-
+          {page.rel === "internal" && step === 0 ? (
+            <Button color="primary" onClick={handleStepChange}>
+              Next
+            </Button>
+          ) : (
+            <Button color="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
+          )}
           <Button onClick={handleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
@@ -247,4 +116,4 @@ const EditPages = ({ openModal, handleModal, pages, setPages, getPages }) => {
   );
 };
 
-export default EditPages;
+export default AddPages;

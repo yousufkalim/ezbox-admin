@@ -18,9 +18,9 @@ import {
   Media,
 } from "reactstrap";
 import PageForm from "./PageForm";
-import AddLayout1 from "./AddLayout1";
-import AddLayout2 from "./AddLayout2";
-import AddLayout3 from "./AddLayout3";
+import LayoutForm1 from "./LayoutForm1";
+import LayoutForm2 from "./LayoutForm2";
+import LayoutForm3 from "./LayoutForm3";
 
 const AddPages = ({ openModal, handleModal, getPages }) => {
   let [step, setStep] = useState(0);
@@ -28,7 +28,7 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
     name: "",
     path: "",
     layout_type: "",
-    rel: "",
+    rel: "external",
   });
   let [layout, setLayout] = useState({});
 
@@ -39,11 +39,14 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
       setStep(2);
     } else if (page.layout_type === "type3") {
       setStep(3);
+    } else {
+      toast.error("Please select a layout first");
     }
   };
 
   const handleSubmit = e => {
     e.preventDefault();
+    let formData = page;
 
     if (!(page.name && page.path)) {
       return toast.error("All fields are required");
@@ -62,7 +65,7 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
       ) {
         return toast.error("All fields are required");
       } else {
-        setPage(prev => ({ ...prev, layout }));
+        formData = { ...formData, layout };
       }
     } else if (step === 2) {
       if (
@@ -70,17 +73,17 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
       ) {
         return toast.error("All fields are required");
       } else {
-        setPage(prev => ({ ...prev, layout }));
+        formData = { ...formData, layout };
       }
     } else if (step === 3) {
       if (!(layout.text && layout.image && layout.textbottom)) {
         return toast.error("All fields are required");
       } else {
-        setPage(prev => ({ ...prev, layout }));
+        formData = { ...formData, layout };
       }
     }
 
-    api("post", "/pages", page).then(res => {
+    api("post", "/pages", formData).then(res => {
       toast.success("Page added successfully");
       getPages();
       handleModal();
@@ -94,9 +97,9 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
           Add Page
         </ModalHeader>
         {step === 0 && <PageForm page={page} setPage={setPage} />}
-        {step === 1 && <AddLayout1 layout={layout} setLayout={setLayout} />}
-        {step === 2 && <AddLayout2 layout={layout} setLayout={setLayout} />}
-        {step === 3 && <AddLayout3 layout={layout} setLayout={setLayout} />}
+        {step === 1 && <LayoutForm1 layout={layout} setLayout={setLayout} />}
+        {step === 2 && <LayoutForm2 layout={layout} setLayout={setLayout} />}
+        {step === 3 && <LayoutForm3 layout={layout} setLayout={setLayout} />}
 
         <ModalFooter>
           {page.rel === "internal" && step === 0 ? (

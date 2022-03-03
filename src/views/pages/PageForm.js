@@ -97,8 +97,6 @@ const PageForm = ({ page, setPage }) => {
                         External
                       </option>
                       <option value="internal">Internal</option>
-                      <option value="Contacts">Contacts</option>
-                      <option value="Products">Products</option>
                     </Input>
                   </FormGroup>
                 </Col>

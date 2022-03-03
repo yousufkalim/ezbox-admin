@@ -45,6 +45,13 @@ const Pages = ({ status }) => {
   const [editModal, setEditModal] = useState(false);
   const history = useHistory();
   const [data, setData] = useState([]);
+  let [page, setPage] = useState({
+    name: "",
+    path: "",
+    layout_type: "",
+    rel: "external",
+  });
+  let [layout, setLayout] = useState({});
 
   const [pages, setPages] = useState([]);
 
@@ -64,12 +71,17 @@ const Pages = ({ status }) => {
 
   const handleEditModal = item => {
     if (item) {
-      setPages({
+      setPage({
         _id: item._id,
         name: item.name,
         path: item.path,
-        layout: item.layout,
+        rel: item.rel,
+        layout_type: item.layout_type,
       });
+    }
+
+    if (item?.layout) {
+      setLayout(item.layout);
     }
 
     setEditModal(open => !open);
@@ -129,7 +141,7 @@ const Pages = ({ status }) => {
                           <td title={item.layout_type}>
                             {item.layout_type?.length > 30
                               ? item.layout_type?.substring(0, 30) + "..."
-                              : item.layout_type}
+                              : item.layout_type || "N/A"}
                           </td>
 
                           <td title={item.rel}>
@@ -200,9 +212,11 @@ const Pages = ({ status }) => {
           <EditPages
             openModal={editModal}
             handleModal={handleEditModal}
-            pages={pages}
-            setPages={setPages}
             getPages={getPages}
+            page={page}
+            setPage={setPage}
+            layout={layout}
+            setLayout={setLayout}
           />
         )}
       </Container>
