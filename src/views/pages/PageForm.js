@@ -67,15 +67,6 @@ const PageForm = ({ page, setPage }) => {
                   </FormGroup>
                 </Col>
               </Row>
-              {/* <Row>
-                    <FontPicker
-                      data={page}
-                      setData={setpage}
-                      fieldName="text_font"
-                      width="12"
-                    />
-                  </Row> */}
-
               <Row>
                 <Col lg="6">
                   <FormGroup>
@@ -99,6 +90,26 @@ const PageForm = ({ page, setPage }) => {
                       <option value="internal">Internal</option>
                     </Input>
                   </FormGroup>
+                  <Col lg="6" style={{ margin: "auto" }}>
+                    <FormGroup>
+                      <label className="form-control-label">
+                        {" "}
+                        <span style={{ color: "red" }}>
+                          {page.rank ? "" : "*"}{" "}
+                        </span>
+                        Rank
+                      </label>{" "}
+                      <Input
+                        className="form-control-alternative text-default"
+                        required={true}
+                        placeholder="Enter page's rank here"
+                        type="number"
+                        value={page.rank}
+                        name="rank"
+                        onChange={handleInput}
+                      />
+                    </FormGroup>
+                  </Col>
                 </Col>
               </Row>
               {page.rel === "internal" && (

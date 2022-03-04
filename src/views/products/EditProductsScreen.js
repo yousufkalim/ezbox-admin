@@ -19,6 +19,7 @@ const EditProductsScreen = ({ openModal, handleModal, }) => {
   let [screenInfo, setScreenInfo] = useState({
     title: "",
     status: false,
+    rank: "",
   });
   let [screenData, setScreenData] = useState(null);
 
@@ -34,9 +35,9 @@ const EditProductsScreen = ({ openModal, handleModal, }) => {
     setScreenData(data.data);
     setScreenInfo({
       title: data.data.name,
-      status: data.data.is_active
+      status: data.data.is_active,
+      rank: data.data.rank
     });
-    console.log("====", data.data);
   };
 
   const handleInput = (e) => {
@@ -56,7 +57,8 @@ const EditProductsScreen = ({ openModal, handleModal, }) => {
 
     const body = {
       name: screenInfo.title,
-      is_active: screenInfo.status
+      is_active: screenInfo.status,
+      rank: screenInfo.rank
     }
 
     api("put", `/pages/${screenData._id}`, body).then((res) => {
@@ -76,7 +78,7 @@ const EditProductsScreen = ({ openModal, handleModal, }) => {
             <Col>
               <Form>
                 <div className="pl-lg-4">
-                  <Row>
+                  <Col>
                     <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -110,7 +112,27 @@ const EditProductsScreen = ({ openModal, handleModal, }) => {
                         </label>
                       </FormGroup>
                     </Col>
-                  </Row>
+                    <Col lg="8" style={{ margin: "auto" }}>
+                      <FormGroup>
+                        <label className="form-control-label">
+                          {" "}
+                          <span style={{ color: "red" }}>
+                            {screenInfo.rank ? "" : "*"}{" "}
+                          </span>
+                          Rank
+                        </label>{" "}
+                        <Input
+                          className="form-control-alternative text-default"
+                          required={true}
+                          placeholder="Enter page's rank here"
+                          type="number"
+                          value={screenInfo.rank}
+                          name="rank"
+                          onChange={handleInput}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Col>
                 </div>
               </Form>
             </Col>
