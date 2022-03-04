@@ -38,12 +38,14 @@ import {
 // core components
 import AddProducts from "./AddProducts";
 import EditProducts from "./EditProducts";
+import EditProductsScreen from "./EditProductsScreen";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
 const Products = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const [editProductsScreenModal, setEditProductsScreenModal] = useState(false);
   const [data, setData] = useState([]);
   let [product, setProduct] = useState({
     title: "",
@@ -82,6 +84,11 @@ const Products = ({ status }) => {
     return openModal;
   };
 
+  const handleEditProductsScreenModal = () => {
+    setEditProductsScreenModal((open) => !open);
+    return openModal;
+  };
+
   const handleDelete = (id) => {
     api("delete", `/product/${id}`).then(() => {
       toast.success("Product deleted successfully");
@@ -103,7 +110,14 @@ const Products = ({ status }) => {
                   <h3 className="mb-0">Products</h3>
                   <Button
                     color="primary"
-                    href="#pablo"
+                    onClick={handleEditProductsScreenModal}
+                    size="md"
+                  >
+                    <i className="ni ni-fat-add"></i>
+                    Edit Product Screen
+                  </Button>
+                  <Button
+                    color="primary"
                     onClick={handleModal}
                     size="md"
                   >
@@ -219,6 +233,12 @@ const Products = ({ status }) => {
             product={product}
             setProduct={setProduct}
             getProducts={getProducts}
+          />
+        )}
+        {editProductsScreenModal && (
+          <EditProductsScreen
+            openModal={editProductsScreenModal}
+            handleModal={handleEditProductsScreenModal}
           />
         )}
       </Container>
