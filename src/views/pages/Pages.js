@@ -57,7 +57,7 @@ const Pages = () => {
   const getPages = async () => {
     const pages = await api("get", "/pages");
     let data = pages.data;
-    data = data.sort( (a,b) => b.rank - a.rank );
+    data = data.sort( (a,b) => a.rank - b.rank );
     setData(data);
   };
 
