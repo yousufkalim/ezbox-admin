@@ -42,7 +42,7 @@ const AddPages = ({
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let formData = page;
 
@@ -51,37 +51,38 @@ const AddPages = ({
     }
 
     if (step === 1) {
-      if (
-        !(
-          layout.title &&
-          layout.text &&
-          layout.leftImg &&
-          layout.rightImg &&
-          layout.centerImg &&
-          layout.textbottom
-        )
-      ) {
+      if (!(layout.title && layout.text && layout.textbottom)) {
         return toast.error("All fields are required");
-      } else {
-        formData = { ...formData, layout };
       }
+
+      if (!(layout.leftImg && layout.rightImg && layout.centerImg)) {
+        return toast.error("Wait before the image to upload");
+      }
+
+      formData = { ...formData, layout };
     } else if (step === 2) {
-      if (
-        !(layout.leftImg && layout.centerImg && layout.rightImg && layout.text)
-      ) {
+      if (!layout.text) {
         return toast.error("All fields are required");
-      } else {
-        formData = { ...formData, layout };
       }
+
+      if (!(layout.leftImg && layout.centerImg && layout.rightImg)) {
+        return toast.error("Wait before the image to upload");
+      }
+
+      formData = { ...formData, layout };
     } else if (step === 3) {
-      if (!(layout.text && layout.image && layout.textbottom)) {
+      if (!(layout.text && layout.textbottom)) {
         return toast.error("All fields are required");
-      } else {
-        formData = { ...formData, layout };
       }
+
+      if (!layout.image) {
+        return toast.error("Wait before the image to upload");
+      }
+
+      formData = { ...formData, layout };
     }
 
-    api("put", `/pages/${formData._id}`, formData).then(res => {
+    api("put", `/pages/${formData._id}`, formData).then((res) => {
       toast.success("Page updated successfully");
       getPages();
       handleModal();
