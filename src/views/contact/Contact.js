@@ -37,12 +37,14 @@ import {
 
 // core components
 import AddContact from "./AddContact";
+import EditContactScreen from "./EditContactScreen";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
 const Contact = ({ status }) => {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState([]);
+  const [editContactScreenModal, setEditContactScreenModal] = useState(false);
   let [contact, setContact] = useState({
     name: "",
     number: "",
@@ -61,6 +63,11 @@ const Contact = ({ status }) => {
 
   const handleModal = () => {
     setOpenModal((open) => !open);
+    return openModal;
+  };
+
+  const handleEditContactScreenModal = () => {
+    setEditContactScreenModal((open) => !open);
     return openModal;
   };
 
@@ -83,6 +90,14 @@ const Contact = ({ status }) => {
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Contacts</h3>
+                  <Button
+                    color="primary"
+                    onClick={handleEditContactScreenModal}
+                    size="md"
+                  >
+                    <i className="ni ni-fat-add"></i>
+                    Edit Contact Screen
+                  </Button>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -92,7 +107,6 @@ const Contact = ({ status }) => {
                     <th scope="col">Number</th>
                     <th scope="col">Email</th>
                     <th scope="col">Message</th>
-
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -106,7 +120,6 @@ const Contact = ({ status }) => {
                               ? item.name?.substring(0, 30) + "..."
                               : item.name}
                           </td>
-
                           <td title={item.number}>
                             {item.number?.length > 30
                               ? item.number?.substring(0, 30) + "..."
@@ -154,6 +167,12 @@ const Contact = ({ status }) => {
             openModal={openModal}
             handleModal={handleModal}
             getContact={getContact}
+          />
+        )}
+        {editContactScreenModal && (
+          <EditContactScreen
+            openModal={editContactScreenModal}
+            handleModal={handleEditContactScreenModal}
           />
         )}
       </Container>

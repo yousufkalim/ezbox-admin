@@ -1,21 +1,11 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
 import {
   Modal,
-  ModalBody,
   ModalHeader,
   ModalFooter,
   Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Table,
-  Label,
-  Media,
 } from "reactstrap";
 import PageForm from "./PageForm";
 import LayoutForm1 from "./LayoutForm1";
@@ -29,6 +19,7 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
     path: "",
     layout_type: "",
     rel: "external",
+    rank: ""
   });
   let [layout, setLayout] = useState({});
 
@@ -100,7 +91,6 @@ const AddPages = ({ openModal, handleModal, getPages }) => {
         {step === 1 && <LayoutForm1 layout={layout} setLayout={setLayout} />}
         {step === 2 && <LayoutForm2 layout={layout} setLayout={setLayout} />}
         {step === 3 && <LayoutForm3 layout={layout} setLayout={setLayout} />}
-
         <ModalFooter>
           {page.rel === "internal" && step === 0 ? (
             <Button color="primary" onClick={handleStepChange}>

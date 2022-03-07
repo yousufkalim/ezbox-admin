@@ -3,25 +3,16 @@ import { toast } from "react-toastify";
 import api from "../../api";
 import {
   Modal,
-  ModalBody,
   ModalHeader,
   ModalFooter,
   Button,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Table,
-  Label,
-  Media,
 } from "reactstrap";
 import PageForm from "./PageForm";
 import LayoutForm1 from "./LayoutForm1";
 import LayoutForm2 from "./LayoutForm2";
 import LayoutForm3 from "./LayoutForm3";
 
-const AddPages = ({
+const EditPage = ({
   openModal,
   handleModal,
   getPages,
@@ -46,7 +37,7 @@ const AddPages = ({
     e.preventDefault();
     let formData = page;
 
-    if (!(page.name && page.path)) {
+    if (!(formData.name && formData.path)) {
       return toast.error("All fields are required");
     }
 
@@ -93,7 +84,7 @@ const AddPages = ({
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add Page
+          Edit Page
         </ModalHeader>
         {step === 0 && <PageForm page={page} setPage={setPage} />}
         {step === 1 && <LayoutForm1 layout={layout} setLayout={setLayout} />}
@@ -117,4 +108,4 @@ const AddPages = ({
   );
 };
 
-export default AddPages;
+export default EditPage;

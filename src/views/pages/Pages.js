@@ -17,10 +17,8 @@
 */
 // reactstrap components
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import api from "api";
 import {
-  Badge,
   Card,
   CardHeader,
   Button,
@@ -28,7 +26,6 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Media,
   Table,
   Container,
   Row,
@@ -40,20 +37,18 @@ import EditPages from "./EditPages";
 import Header from "components/Headers/Header.js";
 import { toast } from "react-toastify";
 
-const Pages = ({ status }) => {
+const Pages = () => {
   const [openModal, setOpenModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const history = useHistory();
   const [data, setData] = useState([]);
   let [page, setPage] = useState({
     name: "",
     path: "",
     layout_type: "",
     rel: "external",
+    rank: "",
   });
   let [layout, setLayout] = useState({});
-
-  const [pages, setPages] = useState([]);
 
   useEffect(() => {
     getPages();
@@ -61,7 +56,9 @@ const Pages = ({ status }) => {
 
   const getPages = async () => {
     const pages = await api("get", "/pages");
-    setData(pages.data);
+    let data = pages.data;
+    data = data.sort( (a,b) => a.rank - b.rank );
+    setData(data);
   };
 
   const handleModal = () => {
@@ -77,6 +74,7 @@ const Pages = ({ status }) => {
         path: item.path,
         rel: item.rel,
         layout_type: item.layout_type,
+        rank: item.rank
       });
     }
 
