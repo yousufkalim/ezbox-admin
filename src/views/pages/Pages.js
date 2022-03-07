@@ -55,7 +55,10 @@ const Pages = () => {
   }, []);
 
   const getPages = async () => {
-    const pages = await api("get", "/pages");
+    const body = {
+      "rel": ["internal", "external"]
+    };
+    const pages = await api("post", "/pages", body);
     let data = pages.data;
     data = data.sort( (a,b) => a.rank - b.rank );
     setData(data);
@@ -122,6 +125,7 @@ const Pages = () => {
                     <th scope="col">Title</th>
                     <th scope="col">Layout</th>
                     <th scope="col">Type</th>
+                    <th scope="col">Rank</th>
                     <th scope="col">Path</th> <th scope="col" />
                   </tr>
                 </thead>
@@ -146,6 +150,12 @@ const Pages = () => {
                             {item.rel?.length > 30
                               ? item.rel?.substring(0, 30) + "..."
                               : item.rel}
+                          </td>
+
+                          <td title={item.rank}>
+                            {item.rank?.length > 30
+                              ? item.rank?.substring(0, 30) + "..."
+                              : item.rank}
                           </td>
 
                           <td title={item.path}>
