@@ -15,7 +15,7 @@ import layout2 from "assets/img/layouts/layout2.png";
 import layout3 from "assets/img/layouts/layout3.png";
 
 const PageForm = ({ page, setPage }) => {
-  const handleInput = e => {
+  const handleInput = (e) => {
     setPage({ ...page, [e.target.name]: e.target.value });
   };
 
@@ -90,26 +90,26 @@ const PageForm = ({ page, setPage }) => {
                       <option value="internal">Internal</option>
                     </Input>
                   </FormGroup>
-                  <Col lg="6" style={{ margin: "auto" }}>
-                    <FormGroup>
-                      <label className="form-control-label">
-                        {" "}
-                        <span style={{ color: "red" }}>
-                          {page.rank ? "" : "*"}{" "}
-                        </span>
-                        Rank
-                      </label>{" "}
-                      <Input
-                        className="form-control-alternative text-default"
-                        required={true}
-                        placeholder="Enter page's rank here"
-                        type="number"
-                        value={page.rank}
-                        name="rank"
-                        onChange={handleInput}
-                      />
-                    </FormGroup>
-                  </Col>
+                </Col>
+                <Col lg="6" style={{ margin: "auto" }}>
+                  <FormGroup>
+                    <label className="form-control-label">
+                      {" "}
+                      <span style={{ color: "red" }}>
+                        {page.rank ? "" : "*"}{" "}
+                      </span>
+                      Rank
+                    </label>{" "}
+                    <Input
+                      className="form-control-alternative text-default"
+                      required={true}
+                      placeholder="Enter page's rank here"
+                      type="number"
+                      value={page.rank}
+                      name="rank"
+                      onChange={handleInput}
+                    />
+                  </FormGroup>
                 </Col>
               </Row>
               {page.rel === "internal" && (

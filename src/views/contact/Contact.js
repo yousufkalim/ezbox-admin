@@ -95,8 +95,7 @@ const Contact = ({ status }) => {
                     onClick={handleEditContactScreenModal}
                     size="md"
                   >
-                    <i className="ni ni-fat-add"></i>
-                    Edit Contact Screen
+                    Edit Screen
                   </Button>
                 </div>
               </CardHeader>

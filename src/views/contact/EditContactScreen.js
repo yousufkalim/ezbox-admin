@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 // core components
 
-const EditContactScreen = ({ openModal, handleModal, }) => {
+const EditContactScreen = ({ openModal, handleModal }) => {
   let [screenInfo, setScreenInfo] = useState({
     title: "",
     status: false,
@@ -29,8 +29,8 @@ const EditContactScreen = ({ openModal, handleModal, }) => {
 
   const getScreenData = async () => {
     const body = {
-      path: "contact"
-    }
+      path: "contact",
+    };
     const data = await api("post", "/pages/get_one", body);
     setScreenData(data.data);
     setScreenInfo({
@@ -51,15 +51,15 @@ const EditContactScreen = ({ openModal, handleModal, }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!(screenInfo.title)) {
+    if (!screenInfo.title) {
       return toast.error("Title is required");
     }
 
     const body = {
       name: screenInfo.title,
       is_active: screenInfo.status,
-      rank: screenInfo.rank
-    }
+      rank: screenInfo.rank,
+    };
 
     api("put", `/pages/${screenData._id}`, body).then((res) => {
       toast.success("Contact screen updated successfully.");
@@ -78,7 +78,7 @@ const EditContactScreen = ({ openModal, handleModal, }) => {
             <Col>
               <Form>
                 <div className="pl-lg-4">
-                  <Col>
+                  <Row>
                     <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -98,20 +98,9 @@ const EditContactScreen = ({ openModal, handleModal, }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="8" style={{ margin: "auto" }}>
-                      <FormGroup>
-                        <label className="form-control-label">
-                          <span style={{ color: "red" }}>
-                            {screenInfo.title ? "" : "*"}{" "}
-                          </span>
-                          Active
-                        </label>
-                        <label className="custom-toggle custom-toggle-primary">
-                          <input type="checkbox" checked={screenInfo.status} onClick={handleActive} />
-                          <span className="custom-toggle-slider rounded-circle" data-label-off="OFF" data-label-on="ON"></span>
-                        </label>
-                      </FormGroup>
-                    </Col>
+                  </Row>
+
+                  <Row>
                     <Col lg="8" style={{ margin: "auto" }}>
                       <FormGroup>
                         <label className="form-control-label">
@@ -132,7 +121,28 @@ const EditContactScreen = ({ openModal, handleModal, }) => {
                         />
                       </FormGroup>
                     </Col>
-                  </Col>
+                  </Row>
+
+                  <Row>
+                    <Col lg="8" style={{ margin: "auto" }}>
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1`}
+                          checked={screenInfo.status}
+                          className="custom-control-input"
+                          onChange={handleActive}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1`}
+                        >
+                          Active
+                        </label>
+                      </div>
+                    </Col>
+                  </Row>
                 </div>
               </Form>
             </Col>

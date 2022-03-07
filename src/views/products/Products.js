@@ -108,22 +108,19 @@ const Products = ({ status }) => {
               <CardHeader className="border-0">
                 <div className="d-flex justify-content-between ">
                   <h3 className="mb-0">Products</h3>
-                  <Button
-                    color="primary"
-                    onClick={handleEditProductsScreenModal}
-                    size="md"
-                  >
-                    <i className="ni ni-fat-add"></i>
-                    Edit Product Screen
-                  </Button>
-                  <Button
-                    color="primary"
-                    onClick={handleModal}
-                    size="md"
-                  >
-                    <i className="ni ni-fat-add"></i>
-                    Add Product
-                  </Button>
+                  <div>
+                    <Button
+                      color="primary"
+                      onClick={handleEditProductsScreenModal}
+                      size="md"
+                    >
+                      Edit Screen
+                    </Button>
+                    <Button color="primary" onClick={handleModal} size="md">
+                      <i className="ni ni-fat-add"></i>
+                      Add Product
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
