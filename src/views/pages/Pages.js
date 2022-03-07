@@ -58,7 +58,7 @@ const Pages = () => {
     const body = {
       "rel": ["internal", "external"]
     };
-    const pages = await api("post", "/pages", body);
+    const pages = await api("post", "/pages/get_all", body);
     let data = pages.data;
     data = data.sort( (a,b) => a.rank - b.rank );
     setData(data);
