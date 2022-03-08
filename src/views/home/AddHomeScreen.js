@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
 import {
   Modal,
   ModalBody,
@@ -13,18 +12,17 @@ import {
   Input,
   Row,
   Col,
-  Label,
 } from "reactstrap";
 import FontPicker from "components/FontPicker";
 // core components
-
-const { Option } = Select;
 
 const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
   let [home, setHome] = useState({
     text: "",
     image: "",
     yt_link: "",
+    background_image: "",
+    is_background_image_active: true,
   });
 
   const handleInput = (e) => {
@@ -56,7 +54,7 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
     <>
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
-          Add HomeScreen
+          Add Home Screen
         </ModalHeader>
         <ModalBody>
           <Row>
@@ -64,7 +62,7 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="Image">
                           <span style={{ color: "red" }}>
@@ -76,6 +74,20 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
                           className="form-control-file form"
                           id="Image"
                           name="image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="Image">
+                          Background Image <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="BackgroundImage"
+                          name="background_image"
                           type="file"
                           onChange={handleFileChange}
                         />
