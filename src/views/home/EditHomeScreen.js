@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
 import FontPicker from "components/FontPicker";
 import {
   Modal,
@@ -17,11 +15,12 @@ import {
 } from "reactstrap";
 // core components
 
-const { Option } = Select;
-
 const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
   const handleInput = (e) => {
     setHome({ ...home, [e.target.name]: e.target.value });
+  };
+  const handleSwitch = (e) => {
+    setHome({ ...home, is_background_image_active: e.target.checked });
   };
   const handleFileChange = (e) => {
     setHome({ ...home, [e.target.name]: "" });
@@ -63,7 +62,7 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="Image">
                           <span style={{ color: "red" }}>
@@ -80,12 +79,9 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                         />
                       </FormGroup>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="Image">
-                          <span style={{ color: "red" }}>
-                            {home.background_image ? "" : "*"}
-                          </span>{" "}
                           Background Image <i className="ni ni-album-2" />
                         </label>
                         <Input
@@ -96,6 +92,24 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                           onChange={handleFileChange}
                         />
                       </FormGroup>
+                    </Col>
+                    <Col lg="4">
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id={`customCheck1`}
+                          checked={home.is_background_image_active}
+                          className="custom-control-input"
+                          onChange={handleSwitch}
+                        />
+                        <label
+                          class="custom-control-label"
+                          for={`customCheck1`}
+                        >
+                          Background Image Active
+                        </label>
+                      </div>
                     </Col>
                   </Row>
 

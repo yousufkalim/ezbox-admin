@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import { Select } from "antd";
 import {
   Modal,
   ModalBody,
@@ -13,19 +12,17 @@ import {
   Input,
   Row,
   Col,
-  Label,
 } from "reactstrap";
 import FontPicker from "components/FontPicker";
 // core components
-
-const { Option } = Select;
 
 const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
   let [home, setHome] = useState({
     text: "",
     image: "",
-    background_image: "",
     yt_link: "",
+    background_image: "",
+    is_background_image_active: true,
   });
 
   const handleInput = (e) => {
@@ -55,7 +52,6 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
 
   return (
     <>
-      {console.log(home)}
       <Modal isOpen={openModal} size="xl" centered>
         <ModalHeader charCode="X" toggle={handleModal}>
           Add Home Screen
@@ -86,9 +82,6 @@ const AddHomeScreen = ({ openModal, handleModal, getHome }) => {
                     <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="Image">
-                          <span style={{ color: "red" }}>
-                            {home.background_image ? "" : "*"}
-                          </span>{" "}
                           Background Image <i className="ni ni-album-2" />
                         </label>
                         <Input

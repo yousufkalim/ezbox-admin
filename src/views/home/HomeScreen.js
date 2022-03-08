@@ -50,6 +50,8 @@ const HomeScreen = ({ status }) => {
     text: "",
     image: "",
     yt_link: "",
+    background_image: "",
+    is_background_image_active: true,
   });
 
   useEffect(() => {
@@ -74,6 +76,8 @@ const HomeScreen = ({ status }) => {
         text_font: item.text_font,
         image: item.image,
         yt_link: item.yt_link,
+        background_image: item.background_image,
+        is_background_image_active: item.is_background_image_active,
       });
     }
 
