@@ -63,11 +63,11 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
               <Form>
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <FormGroup>
                         <label className="form-control-label" htmlFor="Image">
                           <span style={{ color: "red" }}>
-                            {home.Image ? "" : "*"}
+                            {home.image ? "" : "*"}
                           </span>{" "}
                           Image <i className="ni ni-album-2" />
                         </label>
@@ -75,6 +75,23 @@ const EditHomeScreen = ({ openModal, handleModal, home, setHome, getHome }) => {
                           className="form-control-file form"
                           id="Image"
                           name="image"
+                          type="file"
+                          onChange={handleFileChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="Image">
+                          <span style={{ color: "red" }}>
+                            {home.background_image ? "" : "*"}
+                          </span>{" "}
+                          Background Image <i className="ni ni-album-2" />
+                        </label>
+                        <Input
+                          className="form-control-file form"
+                          id="BackgroundImage"
+                          name="background_image"
                           type="file"
                           onChange={handleFileChange}
                         />
