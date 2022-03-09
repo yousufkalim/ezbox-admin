@@ -1,8 +1,12 @@
 {
   "hosting": {
-    "site": "ezbox-admin",
+    "site": "ezboxmedia-admin",
     "public": "build",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "**",

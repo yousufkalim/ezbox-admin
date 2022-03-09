@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn && CI= npm run build
+      - run: npm i && CI= npm run buid
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EZBOX_DEMO }}'
-          projectId: ezbox-demo
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_EZBOXMEDIA_WS }}'
+          projectId: ezboxmedia-ws
