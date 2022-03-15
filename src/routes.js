@@ -20,6 +20,7 @@ import Pages from "views/pages/Pages";
 import Contact from "views/contact/Contact";
 import HomeScreen from "views/home/HomeScreen";
 import Products from "views/products/Products";
+import Reviews from "views/reviews/Reviews";
 import Register from "views/Register.js";
 import Login from "views/Login.js";
 
@@ -55,12 +56,20 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/reviews",
+    name: "Reviews",
+    icon: "ni ni-key-25 text-info",
+    component: Reviews,
+    layout: "/admin",
+  },
+  {
     path: "/contact",
     name: "Contact Us",
     icon: "ni ni-email-83 text-orange",
     component: Contact,
     layout: "/admin",
   },
+
   {
     path: "/register",
     name: "Register",
